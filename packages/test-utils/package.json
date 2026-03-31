@@ -1,0 +1,31 @@
+{
+  "name": "@etape/test-utils",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./render": "./src/render.tsx",
+    "./msw": "./src/msw.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@etape/api-client": "*",
+    "@tanstack/react-query": "~5.74.4",
+    "@testing-library/react": "~16.3.0",
+    "@testing-library/user-event": "~14.6.1",
+    "@testing-library/jest-dom": "~6.6.3",
+    "msw": "~2.7.3"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@etape/typescript-config": "*",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "typescript": "5.9.2"
+  }
+}
