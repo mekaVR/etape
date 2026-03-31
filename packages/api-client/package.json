@@ -1,0 +1,26 @@
+{
+  "name": "@etape/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./client": "./src/client.ts",
+    "./hooks": "./src/hooks.ts",
+    "./types": "./src/types.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "@tanstack/react-query": "^5.74.4"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0"
+  },
+  "devDependencies": {
+    "@etape/typescript-config": "*",
+    "@types/node": "^24.12.0",
+    "typescript": "~5.9.3"
+  }
+}
