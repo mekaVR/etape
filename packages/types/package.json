@@ -1,0 +1,20 @@
+{
+  "name": "@etape/types",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./schemas/*": "./src/schemas/*.ts",
+    "./types/*": "./src/types/*.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@etape/typescript-config": "*",
+    "typescript": "~5.9.3"
+  }
+}

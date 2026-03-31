@@ -2,7 +2,6 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
-import { Button } from "@etape/ui/components/button"
 import './App.css'
 
 function App() {
@@ -28,9 +27,6 @@ function App() {
         >
           Count is {count}
         </button>
-        <div className="flex min-h-screen items-center justify-center">
-          <Button>Hello etape 🚀</Button>
-        </div>
       </section>
 
       <div className="ticks"></div>
