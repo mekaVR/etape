@@ -3,7 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "./assets/vite.svg";
 import heroImg from "./assets/hero.png";
 import "./App.css";
-import { Button } from "@etape/ui/components/button";
+import { Badge } from "@workspace/ui/components/badge";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -28,7 +28,7 @@ function App() {
         >
           Count is {count}
         </button>
-        <Button></Button>
+        <Badge>Fongesoft</Badge>
       </section>
 
       <div className="ticks"></div>
