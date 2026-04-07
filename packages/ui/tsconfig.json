@@ -3,7 +3,7 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "paths": {
-      "@workspace/ui/*": ["./src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],
