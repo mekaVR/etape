@@ -11,21 +11,22 @@ import { UsersModule } from '@users/users.module';
 import { StringValue } from 'ms';
 
 @Module({
-    imports: [
-        PassportModule,
-        JwtModule.registerAsync({
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => ({
-                secret: config.get<string>('JWT_SECRET'),
-                signOptions: {
-                    expiresIn: config.get<StringValue>('JWT_EXPIRES_IN', '15m'),
-                },
-            }),
-        }),
-        UsersModule,
-    ],
-    controllers: [AuthController],
-    providers: [AuthService, PasswordService, JwtStrategy, RefreshStrategy],
+  imports: [
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: config.get<StringValue>('JWT_EXPIRES_IN', '15m'),
+        },
+      }),
+    }),
+    UsersModule,
+  ],
+  controllers: [AuthController],
+  providers: [AuthService, PasswordService, JwtStrategy, RefreshStrategy],
+  exports: [PasswordService],
 })
 export class AuthModule {}

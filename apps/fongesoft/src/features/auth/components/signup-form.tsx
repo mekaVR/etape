@@ -32,7 +32,9 @@ export function SignupForm() {
         <CardContent className="grid p-0 md:grid-cols-2">
           <form
             className="p-6 md:p-8"
-            onSubmit={handleSubmit(({ ...data }) => mutate(data))}
+            onSubmit={handleSubmit(({ confirmPassword, ...data }) =>
+              mutate(data),
+            )}
           >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">

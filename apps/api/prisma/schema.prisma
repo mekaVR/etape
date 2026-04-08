@@ -20,7 +20,7 @@ model User {
   lastName  String?
   email     String   @unique
   password  String
-  role      String   @default("user")
+  role      String   @default("beneficiaire")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
