@@ -1,17 +1,17 @@
 import { useMutation } from "@etape/api-client/hooks";
-import { register } from "@etape/api-client/auth";
+import { login } from "@etape/api-client/auth";
 import { useNavigate } from "react-router";
 import { AxiosError } from "axios";
 import type { ApiError } from "@etape/api-client/types";
-import { useAuth } from "@/app/providers/auth-provider";
+import { useAuth } from "@/app/provider/auth-provider.tsx";
 
-export function useRegister() {
+export function useLogin() {
   const navigate = useNavigate();
   const { setUserFromToken } = useAuth();
 
   return useMutation({
-    mutationKey: ["register"],
-    mutationFn: register,
+    mutationKey: ["login"],
+    mutationFn: login,
     onSuccess: (data) => {
       setUserFromToken(data.accessToken);
       navigate("/");

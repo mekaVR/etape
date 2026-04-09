@@ -1,63 +1,135 @@
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent } from "@workspace/ui/components/card";
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSeparator,
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
+import { useRegister } from "../hooks/use-register";
+import { signupSchema, type SignupFormData } from "@etape/types/schemas/auth";
+import { signupDefaultValues } from "@etape/types/schemas/auth-defaults";
 
-export function SignupForm({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+export function SignupForm() {
+  const { mutate, isPending, error: serverError } = useRegister();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: signupDefaultValues,
+  });
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6")}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form
+            className="p-6 md:p-8"
+            onSubmit={handleSubmit(({ confirmPassword, ...data }) =>
+              mutate(data),
+            )}
+          >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Create your account</h1>
+                <h1 className="text-2xl font-bold">Créer un compte</h1>
                 <p className="text-sm text-balance text-muted-foreground">
-                  Enter your email below to create your account
+                  Remplissez les informations ci-dessous
                 </p>
               </div>
-              <Field>
+              {serverError && (
+                <FieldError role="alert">{serverError.message}</FieldError>
+              )}
+              <Field data-invalid={!!errors.username}>
+                <FieldLabel htmlFor="username">
+                  Nom d&#39;utilisateur
+                </FieldLabel>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="johndoe"
+                  aria-invalid={!!errors.username}
+                  aria-describedby={
+                    errors.username ? "username-error" : undefined
+                  }
+                  {...register("username")}
+                />
+                {errors.username && (
+                  <FieldError id="username-error">
+                    {errors.username.message}
+                  </FieldError>
+                )}
+              </Field>
+              <Field data-invalid={!!errors.email}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
+                  {...register("email")}
                 />
-                <FieldDescription>
-                  We&apos;ll use this to contact you. We will not share your
-                  email with anyone else.
-                </FieldDescription>
+                {errors.email && (
+                  <FieldError id="email-error">
+                    {errors.email.message}
+                  </FieldError>
+                )}
               </Field>
               <Field>
                 <Field className="grid grid-cols-2 gap-4">
-                  <Field>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input id="password" type="password" required />
+                  <Field data-invalid={!!errors.password}>
+                    <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
+                    <Input
+                      id="password"
+                      type="password"
+                      aria-invalid={!!errors.password}
+                      aria-describedby={
+                        errors.password ? "password-error" : undefined
+                      }
+                      {...register("password")}
+                    />
+                    {errors.password && (
+                      <FieldError id="password-error">
+                        {errors.password.message}
+                      </FieldError>
+                    )}
                   </Field>
-                  <Field>
-                    <FieldLabel htmlFor="confirm-password">
-                      Confirm Password
-                    </FieldLabel>
-                    <Input id="confirm-password" type="password" required />
+                  <Field data-invalid={!!errors.confirmPassword}>
+                    <FieldLabel htmlFor="confirmPassword">Confirmer</FieldLabel>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      aria-invalid={!!errors.confirmPassword}
+                      aria-describedby={
+                        errors.confirmPassword
+                          ? "confirm-password-error"
+                          : undefined
+                      }
+                      {...register("confirmPassword")}
+                    />
+                    {errors.confirmPassword && (
+                      <FieldError id="confirm-password-error">
+                        {errors.confirmPassword.message}
+                      </FieldError>
+                    )}
                   </Field>
                 </Field>
                 <FieldDescription>
-                  Must be at least 8 characters long.
+                  Minimum 8 caractères, au moins une lettre et un chiffre.
                 </FieldDescription>
               </Field>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? "Création..." : "Créer un compte"}
+                </Button>
               </Field>
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
@@ -92,7 +164,7 @@ export function SignupForm({
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Already have an account? <a href="#">Sign in</a>
+                Déjà un compte ? <a href="/login">Se connecter</a>
               </FieldDescription>
             </FieldGroup>
           </form>
@@ -105,10 +177,6 @@ export function SignupForm({
           </div>
         </CardContent>
       </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
     </div>
   );
 }

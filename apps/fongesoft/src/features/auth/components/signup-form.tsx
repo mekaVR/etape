@@ -12,8 +12,8 @@ import {
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
 import { useRegister } from "../hooks/use-register";
-import { signupSchema, type SignupFormData } from "../schemas/signup.schema";
-import { signupDefaultValues } from "@/features/auth/constants.ts";
+import { signupSchema, type SignupFormData } from "@etape/types/schemas/auth";
+import { signupDefaultValues } from "@etape/types/schemas/auth-defaults";
 
 export function SignupForm() {
   const { mutate, isPending, error: serverError } = useRegister();

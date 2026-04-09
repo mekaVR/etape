@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router";
-import { useAuth } from "@/app/providers/auth-provider";
+import { useAuth } from "@/app/provider/auth-provider.tsx";
 import type { User } from "@etape/types/types/auth";
 
 export function ProtectedRoute({ roles }: { roles?: User["role"][] }) {

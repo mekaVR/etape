@@ -39,6 +39,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function setUserFromToken(token: string) {
+    const decode = decodeToken(token);
+    console.log("decode", decode);
     setUser(decodeToken(token));
   }
 

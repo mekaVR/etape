@@ -1,14 +1,16 @@
+import { Routes, Route } from "react-router";
+import { ProtectedRoute } from "./protected-route";
 import LoginPage from "@/features/auth/pages/login";
-import { BrowserRouter, Routes, Route } from "react-router";
-import SignupPage from "@/features/auth/pages/signup.tsx";
+import SignupPage from "@/features/auth/pages/signup";
 
 export function AppRouter() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<div />} />
+      </Route>
+    </Routes>
   );
 }

@@ -1,11 +1,11 @@
 import { apiClient, setAccessToken } from "@etape/api-client/client";
 import type {
   LoginPayload,
-  AuthResponse,
   RegisterPayload,
-} from "@/features/auth/interfaces/auth.interfaces.ts";
+  AuthResponse,
+  User,
+} from "@etape/types/types/auth";
 import { jwtDecode } from "jwt-decode";
-import type { User } from "../interfaces/user.interface";
 
 interface JwtPayload {
   sub: number;

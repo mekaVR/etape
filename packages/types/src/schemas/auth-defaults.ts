@@ -1,5 +1,5 @@
-import type { LoginFormData } from "./schemas/login.schema";
-import type { SignupFormData } from "./schemas/signup.schema";
+import type { LoginFormData } from "./auth";
+import type { SignupFormData } from "./auth";
 
 export const loginDefaultValues: LoginFormData = {
   email: "",

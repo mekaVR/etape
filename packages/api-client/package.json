@@ -6,15 +6,17 @@
   "exports": {
     "./client": "./src/client.ts",
     "./hooks": "./src/hooks.ts",
-    "./types": "./src/types.ts"
+    "./types": "./src/types.ts",
+    "./auth": "./src/auth.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "axios": "~1.9.0",
+    "@etape/types": "*",
     "@tanstack/react-query": "~5.74.4",
-    "@etape/types": "*"
+    "axios": "~1.9.0",
+    "jwt-decode": "^4.0.0"
   },
   "peerDependencies": {
     "react": "^19.2.0"

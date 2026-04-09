@@ -12,8 +12,8 @@ import {
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
 import { useLogin } from "../hooks/use-login";
-import { loginSchema, type LoginFormData } from "../schemas/login.schema";
-import { loginDefaultValues } from "@/features/auth/constants.ts";
+import { loginSchema, type LoginFormData } from "@etape/types/schemas/auth";
+import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
 
 export function LoginForm() {
   const { mutate, isPending, error: serverError } = useLogin();

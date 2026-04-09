@@ -1,5 +1,5 @@
 import { useMutation } from "@etape/api-client/hooks";
-import { login } from "../services/auth.service";
+import { login } from "@etape/api-client/auth";
 import { useNavigate } from "react-router";
 import { AxiosError } from "axios";
 import type { ApiError } from "@etape/api-client/types";
