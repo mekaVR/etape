@@ -1,17 +1,21 @@
-import LoginPage from "@/features/auth/pages/login";
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
-import SignupPage from "@/features/auth/pages/signup.tsx";
 import { ProtectedRoute } from "@/app/router/protected-route.tsx";
+
+const LoginPage = lazy(() => import("@/features/auth/pages/login"));
+const SignupPage = lazy(() => import("@/features/auth/pages/signup"));
 
 export function AppRouter() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
 
-      <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<div />} />
-      </Route>
-    </Routes>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<div />} />
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }
