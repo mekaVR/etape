@@ -14,6 +14,7 @@ import { Input } from "@workspace/ui/components/input";
 import { useRegister } from "../hooks/use-register";
 import { signupSchema, type SignupFormData } from "@etape/types/schemas/auth";
 import { signupDefaultValues } from "@etape/types/schemas/auth-defaults";
+import logo from "@/assets/transition-pro_logo.png";
 
 export function SignupForm() {
   const { mutate, isPending, error: serverError } = useRegister();
@@ -135,11 +136,11 @@ export function SignupForm() {
               </FieldDescription>
             </FieldGroup>
           </form>
-          <div className="relative hidden bg-muted md:block">
+          <div className="relative hidden md:block">
             <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              src={logo}
+              alt="Transition Pro"
+              className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
             />
           </div>
         </CardContent>

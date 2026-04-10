@@ -14,6 +14,7 @@ import { Input } from "@workspace/ui/components/input";
 import { useLogin } from "../hooks/use-login";
 import { loginSchema, type LoginFormData } from "@etape/types/schemas/auth";
 import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
+import logo from "@/assets/transition-pro_logo.png";
 
 export function LoginForm() {
   const { mutate, isPending, error: serverError } = useLogin();
@@ -95,11 +96,11 @@ export function LoginForm() {
               </FieldDescription>
             </FieldGroup>
           </form>
-          <div className="relative hidden bg-muted md:block">
+          <div className="relative hidden md:block">
             <img
-              src="../../../assets/hero.png"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              src={logo}
+              alt="Transition Pro"
+              className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
             />
           </div>
         </CardContent>

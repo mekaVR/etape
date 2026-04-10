@@ -1,0 +1,243 @@
+
+/* ─── Police Marianne ─────────────────────────────────────────── */
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Thin_Italic.woff2') format('woff2');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Light_Italic.woff2') format('woff2');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Regular_Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Medium_Italic.woff2') format('woff2');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-Bold_Italic.woff2') format('woff2');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Marianne';
+    src: url('./fonts/Marianne-ExtraBold_Italic.woff2') format('woff2');
+    font-weight: 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+/* ─── Tokens light ────────────────────────────────────────────── */
+:root {
+    --background: #ffffff;
+    --foreground: #1d1d1b;
+    --card: #ffffff;
+    --card-foreground: #1d1d1b;
+    --popover: #ffffff;
+    --popover-foreground: #1d1d1b;
+    --primary: #00aba9;
+    --primary-foreground: #ffffff;
+    --secondary: #4432aa;
+    --secondary-foreground: #ffffff;
+    --muted: #d3caca;
+    --muted-foreground: #575756;
+    --accent: #c5f0ef;
+    --accent-foreground: #1d1d1b;
+    --destructive: #ff5c61;
+    --destructive-foreground: #ffffff;
+    --border: #d3caca;
+    --input: #d3caca;
+    --ring: #00aba9;
+    --radius: 0.5rem;
+
+    /* Tokens étendus */
+    --warning: #918500;
+    --warning-alt: #f59342;
+    --teal-light: #80cbc4;
+    --red-light: #fff0f1;
+    --red-border: #ffcaca;
+    --orange-light: #fff4e5;
+    --orange-border: #ffddb8;
+    --cyan-light: #f0fcfc;
+    --cyan-border: #b8ebea;
+    --cyan-lighter: #c5f0ef;
+    --teal-lighter: #f0f8f7;
+    --orange-lighter: #ffe8d3;
+    --grey-50: #f6f6f6;
+    --grey-100: #eeeeee;
+    --grey-200: #e5e5e5;
+    --grey-300: #999999;
+    --grey-400: #666666;
+    --grey-500: #333333;
+
+    /* Sidebar */
+    --sidebar: #f6f6f6;
+    --sidebar-foreground: #1d1d1b;
+    --sidebar-primary: #00aba9;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #c5f0ef;
+    --sidebar-accent-foreground: #1d1d1b;
+    --sidebar-border: #d3caca;
+    --sidebar-ring: #00aba9;
+}
+
+/* ─── Tokens dark ─────────────────────────────────────────────── */
+.dark {
+    --background: #1d1d1b;
+    --foreground: #ffffff;
+    --card: #1a1a1a;
+    --card-foreground: #ffffff;
+    --popover: #1a1a1a;
+    --popover-foreground: #ffffff;
+    --primary: #00aba9;
+    --primary-foreground: #ffffff;
+    --secondary: #4432aa;
+    --secondary-foreground: #ffffff;
+    --muted: #2a2a2a;
+    --muted-foreground: #d3caca;
+    --accent: #2a4a4a;
+    --accent-foreground: #ffffff;
+    --destructive: #ff5c61;
+    --destructive-foreground: #ffffff;
+    --border: #3a3a3a;
+    --input: #2a2a2a;
+    --ring: #00aba9;
+
+    /* Tokens étendus dark */
+    --teal-light: #2a4a48;
+    --red-light: #4a2a2a;
+    --red-border: #6a3a3a;
+    --orange-light: #4a3a2a;
+    --orange-border: #6a4a3a;
+    --cyan-light: #2a4a4a;
+    --cyan-border: #3a5a5a;
+    --cyan-lighter: #3a6a6a;
+    --teal-lighter: #1a3a38;
+    --orange-lighter: #3a2a1a;
+    --grey-50: #121212;
+    --grey-100: #1e1e1e;
+    --grey-200: #2c2c2c;
+    --grey-300: #4a4a4a;
+    --grey-400: #aaaaaa;
+    --grey-500: #cccccc;
+
+    /* Sidebar */
+    --sidebar: #1a1a1a;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #00aba9;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #2a4a4a;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #3a3a3a;
+    --sidebar-ring: #00aba9;
+}
+
+/* ─── Mapping Tailwind ────────────────────────────────────────── */
+@theme inline {
+    --font-sans: 'Marianne', sans-serif;
+    --font-heading: 'Marianne', sans-serif;
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-warning: var(--warning);
+    --color-warning-alt: var(--warning-alt);
+    --color-teal-light: var(--teal-light);
+    --color-cyan-light: var(--cyan-light);
+    --color-cyan-lighter: var(--cyan-lighter);
+    --color-teal-lighter: var(--teal-lighter);
+    --color-grey-50: var(--grey-50);
+    --color-grey-100: var(--grey-100);
+    --color-grey-200: var(--grey-200);
+    --color-grey-300: var(--grey-300);
+    --color-grey-400: var(--grey-400);
+    --color-grey-500: var(--grey-500);
+
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+}
