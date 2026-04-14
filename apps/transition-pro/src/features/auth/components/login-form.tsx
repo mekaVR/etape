@@ -37,7 +37,7 @@ export function LoginForm() {
           >
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <h1 className="text-2xl font-bold">Bienvenue</h1>
                 <p className="text-balance text-muted-foreground">
                   Connectez-vous à votre compte
                 </p>

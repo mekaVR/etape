@@ -9,6 +9,7 @@
     "./theme.css": "./src/theme.css"
   },
   "scripts": {
+    "ui:add": "node scripts/ui-add.mjs",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"

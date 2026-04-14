@@ -4,18 +4,25 @@ import { useNavigate } from "react-router";
 import { AxiosError } from "axios";
 import type { ApiError } from "@etape/api-client/types";
 import { useAuth } from "@/app/provider/auth-provider.tsx";
+import { useState } from "react";
 
 export function useRegister() {
   const navigate = useNavigate();
   const { setUserFromToken } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined,
+  );
 
-  return useMutation({
+  const mutation = useMutation({
     mutationKey: ["register"],
     mutationFn: register,
     onSuccess: (data) => {
       setUserFromToken(data.accessToken);
       navigate("/");
     },
-    onError: (error: AxiosError<ApiError>) => error?.response?.data?.message,
+    onError: (error: AxiosError<ApiError>) =>
+      setErrorMessage(error?.response?.data?.message),
   });
+
+  return { ...mutation, errorMessage };
 }

@@ -1,28 +1,10 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
 import { ProtectedRoute } from "./protected-route";
-import { useAuth } from "@/app/provider/auth-provider.tsx";
+import Layout from "../layouts/layout";
 
 const LoginPage = lazy(() => import("@/features/auth/pages/login"));
 const SignupPage = lazy(() => import("@/features/auth/pages/signup"));
-
-function HomePage() {
-  const { user, logout } = useAuth();
-
-  function toggleDark() {
-    document.documentElement.classList.toggle("dark");
-  }
-
-  return (
-    <div>
-      <p>
-        Connecté en tant que {user?.username} ({user?.role})
-      </p>
-      <button onClick={logout}>Se déconnecter</button>
-      <button onClick={toggleDark}>Toggle dark mode</button>
-    </div>
-  );
-}
 
 export function AppRouter() {
   return (
@@ -31,7 +13,16 @@ export function AppRouter() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<HomePage />} />
+          <Route element={<Layout />}>
+            <Route path="/" element={<div>DASHBOARD</div>} />
+            <Route path="/messagerie" element={<div>MESSAGERIE</div>} />
+            <Route path="/profil" element={<div>PROFILE</div>} />
+            <Route path="/dossiers" element={<div>dossiers</div>} />
+            <Route path="/documents" element={<div>documents</div>} />
+            <Route path="/rendez-vous" element={<div>rendez-vous</div>} />
+            <Route path="/cpi" element={<div>cpi</div>} />
+            <Route path="/reseau" element={<div>reseau</div>} />
+          </Route>
         </Route>
       </Routes>
     </Suspense>
