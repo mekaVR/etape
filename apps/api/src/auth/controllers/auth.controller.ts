@@ -11,9 +11,14 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { AuthService } from '@auth/services/auth.service';
-import { LoginDto } from '@auth/dto/login.dto';
-import { RegisterDto } from '@auth/dto/register.dto';
 import { AuthenticatedRequest } from '@auth/interfaces/authenticated-request.interface';
+import {
+  LoginPayload,
+  loginSchema,
+  RegisterPayload,
+  registerSchema,
+} from '@etape/types/schemas/auth';
+import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
 
 @Controller('auth')
 export class AuthController {
@@ -21,16 +26,21 @@ export class AuthController {
 
   @Post('register')
   register(
-    @Body() registerDto: RegisterDto,
-    @Res({ passthrough: true }) res: Response,
+    @Body(new ZodValidationPipe(registerSchema)) dto: RegisterPayload,
+    @Res({ passthrough: true })
+    res: Response,
   ) {
-    return this.authService.register(registerDto, res);
+    return this.authService.register(dto, res);
   }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
-    return this.authService.login(loginDto, res);
+  login(
+    @Body(new ZodValidationPipe(loginSchema)) dto: LoginPayload,
+    @Res({ passthrough: true })
+    res: Response,
+  ) {
+    return this.authService.login(dto, res);
   }
 
   @UseGuards(AuthGuard('jwt-refresh'))

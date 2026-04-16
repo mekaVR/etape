@@ -1,11 +1,12 @@
 import { useMutation } from "@etape/api-client/hooks";
 import { register } from "@etape/api-client/auth";
 import { useNavigate } from "react-router";
-import { AxiosError } from "axios";
-import type { ApiError } from "@etape/api-client/types";
 import { useAuth } from "@/app/providers/auth-provider";
+import { applyApiError } from "transition-pro/src/lib/apply-api-error.ts";
+import type { UseFormSetError } from "react-hook-form";
+import type { SignupFormData } from "@etape/types/schemas/auth";
 
-export function useRegister() {
+export function useRegister(setError: UseFormSetError<SignupFormData>) {
   const navigate = useNavigate();
   const { setUserFromToken } = useAuth();
 
@@ -16,6 +17,6 @@ export function useRegister() {
       setUserFromToken(data.accessToken);
       navigate("/");
     },
-    onError: (error: AxiosError<ApiError>) => error?.response?.data?.message,
+    onError: (error) => applyApiError(error, setError),
   });
 }

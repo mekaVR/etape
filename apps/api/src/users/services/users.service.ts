@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateUserDto } from '@users/dto/create-user.dto';
-import { UpdateUserDto } from '@users/dto/update-user.dto';
 import { PasswordService } from '@auth/services/password.service';
+import type { RegisterPayload } from '@etape/types/schemas/auth';
+import type { UpdateUserPayload } from '@etape/types/schemas/user';
 
 @Injectable()
 export class UsersService {
@@ -11,7 +11,7 @@ export class UsersService {
     private readonly passwordService: PasswordService,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: RegisterPayload) {
     const hashedPassword = await this.passwordService.encryptPassword(
       createUserDto.password,
     );
@@ -39,7 +39,7 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { username } });
   }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+  async updateUser(id: number, updateUserDto: UpdateUserPayload) {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,

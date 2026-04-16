@@ -12,20 +12,21 @@ import {
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
 import { useLogin } from "../hooks/use-login";
-import { loginSchema, type LoginFormData } from "@etape/types/schemas/auth";
+import { type LoginPayload, loginSchema } from "@etape/types/schemas/auth";
 import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
 
 export function LoginForm() {
-  const { mutate, isPending, error: serverError } = useLogin();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
-  } = useForm<LoginFormData>({
+  } = useForm<LoginPayload>({
     resolver: zodResolver(loginSchema),
     defaultValues: loginDefaultValues,
   });
+  const { mutate, isPending } = useLogin(setError);
 
   return (
     <div className={cn("flex flex-col gap-6")}>
@@ -42,8 +43,10 @@ export function LoginForm() {
                   Connectez-vous à votre compte
                 </p>
               </div>
-              {serverError && (
-                <FieldError role="alert">{serverError.message}</FieldError>
+              {errors.root?.serverError && (
+                <FieldError role="alert" className="text-sm text-destructive">
+                  {errors.root.serverError.message}
+                </FieldError>
               )}
               <Field data-invalid={!!errors.email}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>

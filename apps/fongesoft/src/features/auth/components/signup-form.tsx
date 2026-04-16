@@ -12,20 +12,24 @@ import {
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
 import { useRegister } from "../hooks/use-register";
-import { signupSchema, type SignupFormData } from "@etape/types/schemas/auth";
+import {
+  type SignupFormData,
+  signupFormSchema,
+} from "@etape/types/schemas/auth";
 import { signupDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
 
 export function SignupForm() {
-  const { mutate, isPending, error: serverError } = useRegister();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<SignupFormData>({
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(signupFormSchema),
     defaultValues: signupDefaultValues,
   });
+  const { mutate, isPending } = useRegister(setError);
 
   return (
     <div className={cn("flex flex-col gap-6")}>
@@ -44,8 +48,10 @@ export function SignupForm() {
                   Remplissez les informations ci-dessous
                 </p>
               </div>
-              {serverError && (
-                <FieldError role="alert">{serverError.message}</FieldError>
+              {errors.root?.serverError && (
+                <FieldError role="alert" className="text-sm text-destructive">
+                  {errors.root.serverError.message}
+                </FieldError>
               )}
               <Field data-invalid={!!errors.username}>
                 <FieldLabel htmlFor="username">

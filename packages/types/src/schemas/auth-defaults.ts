@@ -1,7 +1,7 @@
-import type { LoginFormData } from "./auth";
+import type { LoginPayload } from "./auth";
 import type { SignupFormData } from "./auth";
 
-export const loginDefaultValues: LoginFormData = {
+export const loginDefaultValues: LoginPayload = {
   email: "",
   password: "",
 };

@@ -1,11 +1,7 @@
 import { apiClient, setAccessToken } from "@etape/api-client/client";
-import type {
-  LoginPayload,
-  RegisterPayload,
-  AuthResponse,
-  User,
-} from "@etape/types/types/auth";
+import type { AuthResponse, User } from "@etape/types/types/auth";
 import { jwtDecode } from "jwt-decode";
+import type { LoginPayload, RegisterPayload } from "@etape/types/schemas/auth";
 
 interface JwtPayload {
   sub: number;

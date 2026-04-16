@@ -6,12 +6,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '@users/services/users.service';
 import { PasswordService } from '@auth/services/password.service';
-import { LoginDto } from '@auth/dto/login.dto';
-import { RegisterDto } from '@auth/dto/register.dto';
 import { JwtTokenPayload } from '@auth/interfaces/authenticated-request.interface';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { StringValue } from 'ms';
+import type { LoginPayload, RegisterPayload } from '@etape/types/schemas/auth';
 
 @Injectable()
 export class AuthService {
@@ -22,10 +21,13 @@ export class AuthService {
     private readonly config: ConfigService,
   ) {}
 
-  async register(registerDto: RegisterDto, res: Response) {
+  async register(registerDto: RegisterPayload, res: Response) {
     const existingUser = await this.usersService.findByEmail(registerDto.email);
     if (existingUser) {
-      throw new ConflictException('Cet email est déjà utilisé');
+      throw new ConflictException({
+        message: 'La creation du compte a échoué',
+        fields: { email: 'Cet email est déjà utilisé' },
+      });
     }
     const user = await this.usersService.createUser(registerDto);
     const tokens = await this.generateTokens(
@@ -38,7 +40,7 @@ export class AuthService {
     return { accessToken: tokens.accessToken };
   }
 
-  async login(loginDto: LoginDto, res: Response) {
+  async login(loginDto: LoginPayload, res: Response) {
     const user = await this.usersService.findByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('Identifiants invalides');

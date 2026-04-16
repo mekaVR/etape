@@ -12,9 +12,9 @@ import {
   Request,
 } from '@nestjs/common';
 import { UsersService } from '@users/services/users.service';
-import { UpdateUserDto } from '@users/dto/update-user.dto';
 import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
 import { AuthenticatedRequest } from '@auth/interfaces/authenticated-request.interface';
+import { UpdateUserPayload } from '@etape/types/schemas/user';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -34,7 +34,7 @@ export class UsersController {
   @Patch()
   updateProfile(
     @Request() req: AuthenticatedRequest,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateUserPayload,
   ) {
     return this.usersService.updateUser(req.user.id, updateUserDto);
   }
