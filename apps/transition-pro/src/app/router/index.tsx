@@ -5,6 +5,7 @@ import Layout from "../layouts/layout";
 
 const LoginPage = lazy(() => import("@/features/auth/pages/login"));
 const SignupPage = lazy(() => import("@/features/auth/pages/signup"));
+const Dashboard = lazy(() => import("@/features/dashboard/pages/dashboard"));
 
 export function AppRouter() {
   return (
@@ -14,7 +15,7 @@ export function AppRouter() {
         <Route path="/signup" element={<SignupPage />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>
-            <Route path="/" element={<div>DASHBOARD</div>} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/messagerie" element={<div>MESSAGERIE</div>} />
             <Route path="/profil" element={<div>PROFILE</div>} />
             <Route path="/dossiers" element={<div>dossiers</div>} />
