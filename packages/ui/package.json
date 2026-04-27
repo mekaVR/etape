@@ -18,8 +18,8 @@
     "@etape/eslint-config": "*",
     "@etape/typescript-config": "*",
     "@types/node": "^22.15.3",
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
     "eslint": "^9.39.1",
     "typescript": "5.9.2"
   },
@@ -30,8 +30,11 @@
   "dependencies": {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.1.0",
     "lucide-react": "^1.7.0",
     "radix-ui": "^1.4.3",
+    "react-day-picker": "^9.14.0",
     "react-hook-form": "~7.56.0",
     "tailwind-merge": "^3.5.0"
   }

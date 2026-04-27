@@ -4,6 +4,12 @@ import { ProtectedRoute } from "@/app/router/protected-route.tsx";
 
 const LoginPage = lazy(() => import("@/features/auth/pages/login"));
 const SignupPage = lazy(() => import("@/features/auth/pages/signup"));
+const FicheEtablissementCreatePage = lazy(
+  () => import("@/features/etablissement/pages/fiche-etablissement-create"),
+);
+const FicheEtablissementEditPage = lazy(
+  () => import("@/features/etablissement/pages/fiche-etablissement-edit"),
+);
 
 export function AppRouter() {
   return (
@@ -14,6 +20,14 @@ export function AppRouter() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<div />} />
+          <Route
+            path="/etablissements/nouveau"
+            element={<FicheEtablissementCreatePage />}
+          />
+          <Route
+            path="/etablissements/:siret"
+            element={<FicheEtablissementEditPage />}
+          />
         </Route>
       </Routes>
     </Suspense>
