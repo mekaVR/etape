@@ -15,7 +15,7 @@ import { useLogin } from "../hooks/use-login";
 import { type LoginPayload, loginSchema } from "@etape/types/schemas/auth";
 import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
-import cover from "@/assets/woman_2.png";
+import cover from "@/assets/HERO_2.png";
 import { Link } from "react-router";
 
 export function LoginForm() {
@@ -32,7 +32,7 @@ export function LoginForm() {
 
   return (
     <div className={cn("grid gap-6 md:grid-cols-2")}>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden min-h-[640px] md:min-h-[700px]">
         <CardContent className="p-6 md:p-8">
           <form onSubmit={handleSubmit((data) => mutate(data))}>
             <FieldGroup>
@@ -69,6 +69,7 @@ export function LoginForm() {
                   <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
                   <Link
                     to="/forgot-password"
+                    viewTransition
                     className="ml-auto text-sm underline-offset-2 hover:underline"
                   >
                     Mot de passe oublié ?
@@ -95,7 +96,10 @@ export function LoginForm() {
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Pas encore de compte ? <a href="/signup">Créer un compte</a>
+                Pas encore de compte ?{" "}
+                <Link to="/signup" viewTransition>
+                  Créer un compte
+                </Link>
               </FieldDescription>
             </FieldGroup>
           </form>

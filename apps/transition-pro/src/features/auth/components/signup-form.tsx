@@ -18,7 +18,8 @@ import {
 } from "@etape/types/schemas/auth";
 import { signupDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
-import cover from "@/assets/woman_1.png";
+import cover from "@/assets/HERO_3.png";
+import { Link } from "react-router";
 
 export function SignupForm() {
   const {
@@ -34,7 +35,7 @@ export function SignupForm() {
 
   return (
     <div className={cn("grid gap-6 md:grid-cols-2")}>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden min-h-[640px] md:min-h-[700px]">
         <CardContent className="p-6 md:p-8">
           <form
             onSubmit={handleSubmit(({ confirmPassword, ...data }) =>
@@ -139,7 +140,10 @@ export function SignupForm() {
                 </Button>
               </Field>
               <FieldDescription className="text-center">
-                Déjà un compte ? <a href="/login">Se connecter</a>
+                Déjà un compte ?{" "}
+                <Link to="/login" viewTransition>
+                  Se connecter
+                </Link>
               </FieldDescription>
             </FieldGroup>
           </form>

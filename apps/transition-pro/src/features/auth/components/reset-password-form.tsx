@@ -19,7 +19,7 @@ import {
 } from "@etape/types/schemas/auth";
 import { resetPasswordDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
-import cover from "@/assets/woman_1.png";
+import cover from "@/assets/HERO_1.png";
 
 export function ResetPasswordForm() {
   const [searchParams] = useSearchParams();
@@ -39,7 +39,7 @@ export function ResetPasswordForm() {
   if (!token) {
     return (
       <div className={cn("grid gap-6 md:grid-cols-2")}>
-        <Card className="overflow-hidden">
+        <Card className="overflow-hidden min-h-[640px] md:min-h-[700px]">
           <CardContent className="p-6 md:p-8">
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
@@ -68,7 +68,7 @@ export function ResetPasswordForm() {
 
   return (
     <div className={cn("grid gap-6 md:grid-cols-2")}>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden min-h-[640px] md:min-h-[700px]">
         <CardContent className="p-6 md:p-8">
           <form
             onSubmit={handleSubmit(({ confirmPassword, ...data }) =>

@@ -19,7 +19,7 @@ import {
 } from "@etape/types/schemas/auth";
 import { forgotPasswordDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
-import cover from "@/assets/woman_2.png";
+import cover from "@/assets/HERO_2.png";
 
 export function ForgotPasswordForm() {
   const {
@@ -35,7 +35,7 @@ export function ForgotPasswordForm() {
 
   return (
     <div className={cn("grid gap-6 md:grid-cols-2")}>
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden min-h-[640px] md:min-h-[700px]">
         <CardContent className="p-6 md:p-8">
           {isSuccess ? (
             <FieldGroup>
@@ -50,7 +50,9 @@ export function ForgotPasswordForm() {
                 </p>
               </div>
               <FieldDescription className="text-center">
-                <Link to="/login">Retour à la connexion</Link>
+                <Link to="/login" viewTransition>
+                  Retour à la connexion
+                </Link>
               </FieldDescription>
             </FieldGroup>
           ) : (
