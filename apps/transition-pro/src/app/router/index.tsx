@@ -3,12 +3,16 @@ import { ProtectedRoute } from "./protected-route";
 import Layout from "../layouts/layout";
 import LoginPage from "@/features/auth/pages/login";
 import SignupPage from "@/features/auth/pages/signup.tsx";
+import ForgotPasswordPage from "@/features/auth/pages/forgot-password.tsx";
+import ResetPasswordPage from "@/features/auth/pages/reset-password.tsx";
 
 export function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
           <Route path="/" element={<div>DASHBOARD</div>} />

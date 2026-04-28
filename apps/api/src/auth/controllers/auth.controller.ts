@@ -13,16 +13,24 @@ import { Response } from 'express';
 import { AuthService } from '@auth/services/auth.service';
 import { AuthenticatedRequest } from '@auth/interfaces/authenticated-request.interface';
 import {
+  ForgotPasswordPayload,
+  forgotPasswordSchema,
   LoginPayload,
   loginSchema,
   RegisterPayload,
   registerSchema,
+  ResetPasswordPayload,
+  resetPasswordSchema,
 } from '@etape/types/schemas/auth';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
+import { PasswordResetService } from '@auth/services/password-reset.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly passwordResetService: PasswordResetService,
+  ) {}
 
   @Post('register')
   register(
@@ -57,5 +65,22 @@ export class AuthController {
   @Post('logout')
   logout(@Res({ passthrough: true }) res: Response) {
     return this.authService.logout(res);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('forgot-password')
+  forgotPassword(
+    @Body(new ZodValidationPipe(forgotPasswordSchema))
+    dto: ForgotPasswordPayload,
+  ) {
+    return this.passwordResetService.forgotPassword(dto.email);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('reset-password')
+  resetPassword(
+    @Body(new ZodValidationPipe(resetPasswordSchema)) dto: ResetPasswordPayload,
+  ) {
+    return this.passwordResetService.resetPassword(dto.token, dto.password);
   }
 }

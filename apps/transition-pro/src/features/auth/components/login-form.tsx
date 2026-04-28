@@ -16,6 +16,7 @@ import { type LoginPayload, loginSchema } from "@etape/types/schemas/auth";
 import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
 import cover from "@/assets/woman_2.png";
+import { Link } from "react-router";
 
 export function LoginForm() {
   const {
@@ -66,12 +67,12 @@ export function LoginForm() {
               <Field data-invalid={!!errors.password}>
                 <div className="flex items-center">
                   <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
-                  <a
-                    href="#"
+                  <Link
+                    to="/forgot-password"
                     className="ml-auto text-sm underline-offset-2 hover:underline"
                   >
                     Mot de passe oublié ?
-                  </a>
+                  </Link>
                 </div>
                 <Input
                   id="password"

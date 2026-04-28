@@ -9,6 +9,8 @@ import { JwtStrategy } from '@auth/strategies/jwt.strategy';
 import { RefreshStrategy } from '@auth/strategies/refresh.strategy';
 import { UsersModule } from '@users/users.module';
 import { StringValue } from 'ms';
+import { PasswordResetService } from '@auth/services/password-reset.service';
+import { MailModule } from '@mail/mail.module';
 
 @Module({
   imports: [
@@ -24,9 +26,16 @@ import { StringValue } from 'ms';
       }),
     }),
     UsersModule,
+    MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, PasswordService, JwtStrategy, RefreshStrategy],
+  providers: [
+    AuthService,
+    PasswordService,
+    PasswordResetService,
+    JwtStrategy,
+    RefreshStrategy,
+  ],
   exports: [PasswordService],
 })
 export class AuthModule {}

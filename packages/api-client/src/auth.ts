@@ -1,7 +1,12 @@
 import { setAccessToken } from "./client";
 import type { AuthResponse, User } from "@etape/types/types/auth";
 import { jwtDecode } from "jwt-decode";
-import type { LoginPayload, RegisterPayload } from "@etape/types/schemas/auth";
+import type {
+  ForgotPasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  ResetPasswordPayload,
+} from "@etape/types/schemas/auth";
 import { getApiInstance } from "./instance.ts";
 
 interface JwtPayload {
@@ -39,4 +44,16 @@ export async function register(
   );
   setAccessToken(data.accessToken);
   return data;
+}
+
+export async function forgotPassword(
+  payload: ForgotPasswordPayload,
+): Promise<void> {
+  await getApiInstance().post("/auth/forgot-password", payload);
+}
+
+export async function resetPassword(
+  payload: ResetPasswordPayload,
+): Promise<void> {
+  await getApiInstance().post("/auth/reset-password", payload);
 }
