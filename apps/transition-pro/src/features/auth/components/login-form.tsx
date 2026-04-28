@@ -15,6 +15,7 @@ import { useLogin } from "../hooks/use-login";
 import { type LoginPayload, loginSchema } from "@etape/types/schemas/auth";
 import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
+import cover from "@/assets/woman_2.png";
 
 export function LoginForm() {
   const {
@@ -29,15 +30,13 @@ export function LoginForm() {
   const { mutate, isPending } = useLogin(setError);
 
   return (
-    <div className={cn("flex flex-col gap-6")}>
-      <Card className="overflow-hidden p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
-          <form
-            className="p-6 md:p-8"
-            onSubmit={handleSubmit((data) => mutate(data))}
-          >
+    <div className={cn("grid gap-6 md:grid-cols-2")}>
+      <Card className="overflow-hidden">
+        <CardContent className="p-6 md:p-8">
+          <form onSubmit={handleSubmit((data) => mutate(data))}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
+                <img src={logo} alt="Transition Pro" className="h-40 w-auto" />
                 <h1 className="text-2xl font-bold">Bienvenue</h1>
                 <p className="text-balance text-muted-foreground">
                   Connectez-vous à votre compte
@@ -99,14 +98,14 @@ export function LoginForm() {
               </FieldDescription>
             </FieldGroup>
           </form>
-          <div className="relative hidden md:block">
-            <img
-              src={logo}
-              alt="Transition Pro"
-              className="absolute inset-0 h-full w-full object-contain dark:brightness-[0.2] dark:grayscale"
-            />
-          </div>
         </CardContent>
+      </Card>
+      <Card className="hidden overflow-hidden p-0 md:block md:max-h-[700px]">
+        <img
+          src={cover}
+          alt="Transition Pro"
+          className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
       </Card>
     </div>
   );
