@@ -8,8 +8,12 @@ z.config(z.locales.fr());
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
+  app.enableCors({
+    origin: process.env.CORS_ORIGINS?.split(',').map((s) => s.trim()) ?? [],
+    credentials: true,
+  });
   app.setGlobalPrefix('api');
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(3000);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

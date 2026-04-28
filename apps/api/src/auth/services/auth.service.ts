@@ -77,7 +77,7 @@ export class AuthService {
   }
 
   async logout(res: Response) {
-    res.clearCookie('refresh_token');
+    res.clearCookie('refresh_token', this.getRefreshCookieBaseOptions());
   }
 
   private async generateTokens(
@@ -99,11 +99,18 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
+  private getRefreshCookieBaseOptions() {
+    const isProd = this.config.get<string>('NODE_ENV') === 'production';
+    return {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? ('none' as const) : ('lax' as const),
+    };
+  }
+
   private setRefreshTokenCookie(res: Response, refreshToken: string) {
     res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: this.config.get<string>('NODE_ENV') === 'production',
-      sameSite: 'strict',
+      ...this.getRefreshCookieBaseOptions(),
       maxAge: this.config.get<number>('REFRESH_TOKEN_MAX_AGE'),
     });
   }

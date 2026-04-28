@@ -1,12 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import {
-  apiClient,
-  setAccessToken,
-  clearAccessToken,
-} from "@etape/api-client/client";
+import { setAccessToken, clearAccessToken } from "@etape/api-client/client";
 import { decodeToken } from "@etape/api-client/auth";
 import type { User } from "@etape/types/types/auth";
+import { apiClient } from "@/lib/api";
 
 interface AuthContextValue {
   user: User | null;
@@ -39,8 +36,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   function setUserFromToken(token: string) {
-    const decode = decodeToken(token);
-    console.log("decode", decode);
     setUser(decodeToken(token));
   }
 
