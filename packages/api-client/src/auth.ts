@@ -1,7 +1,8 @@
-import { apiClient, setAccessToken } from "@etape/api-client/client";
+import { setAccessToken } from "./client";
 import type { AuthResponse, User } from "@etape/types/types/auth";
 import { jwtDecode } from "jwt-decode";
 import type { LoginPayload, RegisterPayload } from "@etape/types/schemas/auth";
+import { getApiInstance } from "./instance.ts";
 
 interface JwtPayload {
   sub: number;
@@ -21,7 +22,10 @@ export function decodeToken(token: string): User {
 }
 
 export async function login(payload: LoginPayload): Promise<AuthResponse> {
-  const { data } = await apiClient.post<AuthResponse>("/auth/login", payload);
+  const { data } = await getApiInstance().post<AuthResponse>(
+    "/auth/login",
+    payload,
+  );
   setAccessToken(data.accessToken);
   return data;
 }
@@ -29,7 +33,7 @@ export async function login(payload: LoginPayload): Promise<AuthResponse> {
 export async function register(
   payload: RegisterPayload,
 ): Promise<AuthResponse> {
-  const { data } = await apiClient.post<AuthResponse>(
+  const { data } = await getApiInstance().post<AuthResponse>(
     "/auth/register",
     payload,
   );
