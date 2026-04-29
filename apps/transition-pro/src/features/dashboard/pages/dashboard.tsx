@@ -42,16 +42,16 @@ export default function Dashboard() {
             <ItemContent>
               <Accordion type="single" collapsible defaultValue="item-1">
                 <AccordionItem value="dossier">
-                  <AccordionTrigger>
-                    <span className="flex-1 text-left flex items-center">
-                      <FolderIcon className={"size-8 text-primary mr-5"} />
+                  <AccordionTrigger className="hover:no-underline">
+                    <span className="flex-1 text-left flex items-center hover:underline">
+                      <FolderIcon className="size-8 text-primary mr-5" />
                       Avancement du dossier DD-202-152
                     </span>
                     <Badge variant="default" className={"mr-5"}>
                       En cours d'examen
                     </Badge>
                   </AccordionTrigger>
-                  <AccordionContent>FLOP</AccordionContent>
+                  <AccordionContent>En cours</AccordionContent>
                 </AccordionItem>
               </Accordion>
             </ItemContent>

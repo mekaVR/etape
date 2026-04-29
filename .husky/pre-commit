@@ -1,1 +1,8 @@
+if git diff --cached --name-only --diff-filter=d | grep -qE "^apps/api/src/generated/"; then
+  echo "Refus de commit: les fichiers Prisma generes ne doivent pas etre versionnes."
+  echo "Verifie que apps/api/.gitignore exclut /src/generated/ et lance:"
+  echo "  git rm -r --cached apps/api/src/generated"
+  exit 1
+fi
+
 npx lint-staged

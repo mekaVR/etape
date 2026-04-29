@@ -5,6 +5,7 @@ import LoginPage from "@/features/auth/pages/login";
 import SignupPage from "@/features/auth/pages/signup.tsx";
 import ForgotPasswordPage from "@/features/auth/pages/forgot-password.tsx";
 import ResetPasswordPage from "@/features/auth/pages/reset-password.tsx";
+import Dashboard from "@/features/dashboard/pages/dashboard.tsx";
 
 export function AppRouter() {
   return (
@@ -15,7 +16,7 @@ export function AppRouter() {
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route element={<ProtectedRoute />}>
         <Route element={<Layout />}>
-          <Route path="/" element={<div>DASHBOARD</div>} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/messagerie" element={<div>MESSAGERIE</div>} />
           <Route path="/profil" element={<div>PROFILE</div>} />
           <Route path="/dossiers" element={<div>dossiers</div>} />

@@ -1,73 +1,85 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# @etape/api
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend NestJS du projet Etape.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Stack
 
-## Description
+- NestJS 10
+- Prisma 7 + PostgreSQL (avec `@prisma/adapter-pg`, `moduleFormat = "cjs"`)
+- JWT (access token header + refresh token httpOnly cookie)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+## Setup initial
 
 ```bash
-$ npm install
+# Depuis la racine du monorepo
+npm install
 ```
 
-## Running the app
+`npm install` lance automatiquement `prisma generate` via le hook `postinstall` — le client Prisma est généré dans `apps/api/src/generated/prisma`.
+
+Configurer la base de données :
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp apps/api/.env.example apps/api/.env
+# Renseigner DATABASE_URL
+npm run db:migrate -w apps/api
 ```
 
-## Test
+## Développement
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Depuis la racine
+npm run dev
 ```
 
-## Support
+Lance toute la stack via Turborepo. Le client Prisma est régénéré avant chaque démarrage (dépendance `db:generate` dans `turbo.json`).
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## Workflow Prisma
 
-## Stay in touch
+### Modifier le schéma
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. Éditer `apps/api/prisma/schema.prisma`
+2. Créer la migration :
+   ```bash
+   npm run db:migrate -w apps/api -- --name <nom_explicite>
+   ```
+3. Commiter `schema.prisma` **et** la migration en même temps.
 
-## License
+### Règles d'or
 
-Nest is [MIT licensed](LICENSE).
+- **Toujours** versionner `schema.prisma` et `prisma/migrations/`.
+- **Jamais** versionner `apps/api/src/generated/` (c'est généré, c'est gitignored).
+- **Jamais** modifier une migration déjà mergée sur `develop` — créer une nouvelle migration à la place.
+- Les versions des packages `prisma`, `@prisma/client` et `@prisma/adapter-pg` sont **figées** (pas de `^`) pour garantir un client identique entre devs.
+
+### Après un `git pull`
+
+Si le schéma a bougé :
+
+```bash
+npm install                         # postinstall regen le client
+npm run db:migrate -w apps/api      # applique les nouvelles migrations
+```
+
+## Scripts utiles
+
+| Script | Rôle |
+|---|---|
+| `npm run dev -w apps/api` | NestJS en watch mode |
+| `npm run db:generate -w apps/api` | Régénère le client Prisma |
+| `npm run db:migrate -w apps/api` | Crée + applique une migration en local |
+| `npm run db:migrate:deploy -w apps/api` | Applique les migrations en prod (CI) |
+| `npm run check-types -w apps/api` | Vérifie les types sans build |
+| `npm run lint -w apps/api` | Lint + autofix |
+
+## Structure
+
+```
+apps/api/
+  prisma/
+    schema.prisma          ← source de vérité
+    migrations/            ← versionné
+  src/
+    generated/prisma/      ← gitignored (généré)
+    ...
+```
