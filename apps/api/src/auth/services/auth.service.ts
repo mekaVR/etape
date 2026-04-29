@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '@users/services/users.service';
 import { PasswordService } from '@auth/services/password.service';
+import { EmailVerificationService } from '@auth/services/email-verification.service';
 import { JwtTokenPayload } from '@auth/interfaces/authenticated-request.interface';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -19,25 +20,19 @@ export class AuthService {
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
+    private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
-  async register(registerDto: RegisterPayload, res: Response) {
+  async register(registerDto: RegisterPayload): Promise<void> {
     const existingUser = await this.usersService.findByEmail(registerDto.email);
     if (existingUser) {
       throw new ConflictException({
-        message: 'La creation du compte a échoué',
+        message: 'La création du compte a échoué',
         fields: { email: 'Cet email est déjà utilisé' },
       });
     }
     const user = await this.usersService.createUser(registerDto);
-    const tokens = await this.generateTokens(
-      user.id,
-      user.email,
-      user.username,
-      user.role,
-    );
-    this.setRefreshTokenCookie(res, tokens.refreshToken);
-    return { accessToken: tokens.accessToken };
+    await this.emailVerificationService.sendVerification(user.id, user.email);
   }
 
   async login(loginDto: LoginPayload, res: Response) {
@@ -54,24 +49,23 @@ export class AuthService {
       throw new UnauthorizedException('Identifiants invalides');
     }
 
-    const tokens = await this.generateTokens(
-      user.id,
-      user.email,
-      user.username,
-      user.role,
-    );
+    if (!user.emailVerifiedAt) {
+      throw new UnauthorizedException({
+        code: 'EMAIL_NOT_VERIFIED',
+        message:
+          'Veuillez vérifier votre adresse email avant de vous connecter',
+      });
+    }
+
+    const tokens = await this.generateTokens(user.id, user.email, user.role);
     this.setRefreshTokenCookie(res, tokens.refreshToken);
+    await this.usersService.updateLastLogin(user.id);
     return { accessToken: tokens.accessToken };
   }
 
   async refresh(userId: number, email: string, res: Response) {
     const user = await this.usersService.findByEmail(email);
-    const tokens = await this.generateTokens(
-      userId,
-      email,
-      user.username,
-      user.role,
-    );
+    const tokens = await this.generateTokens(user.id, user.email, user.role);
     this.setRefreshTokenCookie(res, tokens.refreshToken);
     return { accessToken: tokens.accessToken };
   }
@@ -80,13 +74,8 @@ export class AuthService {
     res.clearCookie('refresh_token', this.getRefreshCookieBaseOptions());
   }
 
-  private async generateTokens(
-    userId: number,
-    email: string,
-    username: string,
-    role: string,
-  ) {
-    const payload: JwtTokenPayload = { sub: userId, email, username, role };
+  private async generateTokens(userId: number, email: string, role: string) {
+    const payload: JwtTokenPayload = { sub: userId, email, role };
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),

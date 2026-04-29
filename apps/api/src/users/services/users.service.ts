@@ -17,8 +17,9 @@ export class UsersService {
     );
     return this.prisma.user.create({
       data: {
-        ...createUserDto,
+        email: createUserDto.email,
         password: hashedPassword,
+        cguAcceptedAt: new Date(),
       },
     });
   }
@@ -35,14 +36,17 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async findByUsername(username: string) {
-    return this.prisma.user.findUnique({ where: { username } });
-  }
-
   async updateUser(id: number, updateUserDto: UpdateUserPayload) {
     return this.prisma.user.update({
       where: { id },
       data: updateUserDto,
+    });
+  }
+
+  async updateLastLogin(id: number) {
+    return this.prisma.user.update({
+      where: { id },
+      data: { lastLoginAt: new Date() },
     });
   }
 

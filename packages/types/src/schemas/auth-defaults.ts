@@ -1,6 +1,7 @@
 import type {
   ForgotPasswordPayload,
   LoginPayload,
+  ResendVerificationPayload,
   ResetPasswordFormData,
 } from "./auth";
 import type { SignupFormData } from "./auth";
@@ -11,10 +12,14 @@ export const loginDefaultValues: LoginPayload = {
 };
 
 export const signupDefaultValues: SignupFormData = {
-  username: "",
   email: "",
   password: "",
   confirmPassword: "",
+  acceptCgu: false,
+};
+
+export const resendVerificationDefaultValues: ResendVerificationPayload = {
+  email: "",
 };
 
 export const forgotPasswordDefaultValues: ForgotPasswordPayload = {

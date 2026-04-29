@@ -11,6 +11,8 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { AuthService } from '@auth/services/auth.service';
+import { EmailVerificationService } from '@auth/services/email-verification.service';
+import { PasswordResetService } from '@auth/services/password-reset.service';
 import { AuthenticatedRequest } from '@auth/interfaces/authenticated-request.interface';
 import {
   ForgotPasswordPayload,
@@ -21,24 +23,25 @@ import {
   registerSchema,
   ResetPasswordPayload,
   resetPasswordSchema,
+  VerifyEmailPayload,
+  verifyEmailSchema,
+  ResendVerificationPayload,
+  resendVerificationSchema,
 } from '@etape/types/schemas/auth';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
-import { PasswordResetService } from '@auth/services/password-reset.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly passwordResetService: PasswordResetService,
+    private readonly emailVerificationService: EmailVerificationService,
   ) {}
 
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Post('register')
-  register(
-    @Body(new ZodValidationPipe(registerSchema)) dto: RegisterPayload,
-    @Res({ passthrough: true })
-    res: Response,
-  ) {
-    return this.authService.register(dto, res);
+  register(@Body(new ZodValidationPipe(registerSchema)) dto: RegisterPayload) {
+    return this.authService.register(dto);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -82,5 +85,22 @@ export class AuthController {
     @Body(new ZodValidationPipe(resetPasswordSchema)) dto: ResetPasswordPayload,
   ) {
     return this.passwordResetService.resetPassword(dto.token, dto.password);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('verify-email')
+  verifyEmail(
+    @Body(new ZodValidationPipe(verifyEmailSchema)) dto: VerifyEmailPayload,
+  ) {
+    return this.emailVerificationService.verifyEmail(dto.token);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('resend-verification')
+  resendVerification(
+    @Body(new ZodValidationPipe(resendVerificationSchema))
+    dto: ResendVerificationPayload,
+  ) {
+    return this.emailVerificationService.resendVerification(dto.email);
   }
 }

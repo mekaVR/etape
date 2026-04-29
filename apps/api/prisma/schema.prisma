@@ -13,20 +13,62 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Civilite {
+  MADAME
+  MONSIEUR
+}
+
 model User {
-  id                  Int                  @id @default(autoincrement())
-  username            String               @unique
-  firstName           String?
-  lastName            String?
-  email               String               @unique
-  password            String
-  role                String               @default("beneficiaire")
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  passwordresetTokens PasswordResetToken[]
+  id                      Int                      @id @default(autoincrement())
+  email                   String                   @unique
+  emailVerifiedAt         DateTime?
+  password                String
+  role                    String                   @default("beneficiaire")
+  cguAcceptedAt           DateTime
+  lastLoginAt             DateTime?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
+  beneficiaireProfile     BeneficiaireProfile?
+  passwordresetTokens     PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+}
+
+model BeneficiaireProfile {
+  id                    Int       @id @default(autoincrement())
+  userId                Int       @unique
+  civilite              Civilite?
+  nom                   String?
+  prenom                String?
+  dateNaissance         DateTime?
+  lieuNaissance         String?
+  nationalite           String?
+  numeroSecuriteSociale String?   @unique
+  adresseNumero         String?
+  adresseVoie           String?
+  adresseComplement     String?
+  codePostal            String?
+  ville                 String?
+  telephoneFixe         String?
+  telephonePortable     String?
+  datePremierEmploi     DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model EmailVerificationToken {
   id        Int       @id @default(autoincrement())
   userId    Int
   tokenHash String    @unique

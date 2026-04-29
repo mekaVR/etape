@@ -1,0 +1,1 @@
+export const DEFAULT_EMAIL_VERIFICATION_TTL_MS = 96 * 60 * 60 * 1000;

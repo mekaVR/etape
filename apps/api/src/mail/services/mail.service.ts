@@ -2,6 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createTransport, Transporter } from 'nodemailer';
 import { passwordResetTemplate } from '@mail/templates/password-reset.template';
+import { emailVerificationTemplate } from '@mail/templates/email-verification.template';
+import { DEFAULT_EMAIL_VERIFICATION_TTL_MS } from '@auth/constants/email-verification.constants';
 
 @Injectable()
 export class MailService {
@@ -35,5 +37,32 @@ export class MailService {
     });
 
     this.logger.log(`Password reset email sent to ${to}`);
+  }
+
+  async sendEmailVerification(to: string, token: string): Promise<void> {
+    const appUrl = this.config.get<string>('APP_URL');
+    const logoUrl = this.config.get<string>('MAIL_LOGO_URL');
+    const from = this.config.get<string>('MAIL_FROM');
+    const ttlMs = this.config.get<number>(
+      'EMAIL_VERIFICATION_TOKEN_TTL_MS',
+      DEFAULT_EMAIL_VERIFICATION_TTL_MS,
+    );
+    const expiresInHours = Math.round(ttlMs / (60 * 60 * 1000));
+    const verifyUrl = `${appUrl}/verify-email?token=${encodeURIComponent(token)}`;
+
+    const html = emailVerificationTemplate({
+      verifyUrl,
+      logoUrl,
+      expiresInHours,
+    });
+
+    await this.transporter.sendMail({
+      from,
+      to,
+      subject: 'Confirmez votre adresse email — Transition Pro',
+      html,
+    });
+
+    this.logger.log(`Email verification sent to ${to}`);
   }
 }

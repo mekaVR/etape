@@ -6,7 +6,6 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = z.object({
-  username: z.string().min(1, "Le nom d'utilisateur est requis"),
   email: z.string().email("Email invalide"),
   password: z
     .string()
@@ -15,16 +14,27 @@ export const registerSchema = z.object({
       /^(?=.*[a-zA-Z])(?=.*\d)/,
       "Doit contenir au moins une lettre et un chiffre",
     ),
+  acceptCgu: z.boolean().refine((v) => v, {
+    message: "Vous devez accepter les conditions générales",
+  }),
 });
 
 export const signupFormSchema = registerSchema
   .extend({
-    confirmPassword: z.string().min(1, "..."),
+    confirmPassword: z.string().min(1, "Confirmez le mot de passe"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Les mots de passe ne correspondent pas",
     path: ["confirmPassword"],
   });
+
+export const verifyEmailSchema = z.object({
+  token: z.string().min(1, "Token manquant"),
+});
+
+export const resendVerificationSchema = z.object({
+  email: z.string().email("Email invalide"),
+});
 
 export const forgotPasswordSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -55,6 +65,10 @@ export const resetPasswordFormSchema = resetPasswordFormBaseSchema.refine(
 
 export type LoginPayload = z.infer<typeof loginSchema>;
 export type RegisterPayload = z.infer<typeof registerSchema>;
+export type VerifyEmailPayload = z.infer<typeof verifyEmailSchema>;
+export type ResendVerificationPayload = z.infer<
+  typeof resendVerificationSchema
+>;
 export type SignupFormData = z.infer<typeof signupFormSchema>;
 export type ForgotPasswordPayload = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordPayload = z.infer<typeof resetPasswordSchema>;

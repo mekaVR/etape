@@ -6,6 +6,7 @@ import SignupPage from "@/features/auth/pages/signup.tsx";
 import ForgotPasswordPage from "@/features/auth/pages/forgot-password.tsx";
 import ResetPasswordPage from "@/features/auth/pages/reset-password.tsx";
 import Dashboard from "@/features/dashboard/pages/dashboard.tsx";
+import Profile from "@/features/profile/pages/profile.tsx";
 
 export function AppRouter() {
   return (
@@ -18,7 +19,7 @@ export function AppRouter() {
         <Route element={<Layout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/messagerie" element={<div>MESSAGERIE</div>} />
-          <Route path="/profil" element={<div>PROFILE</div>} />
+          <Route path="/profil" element={<Profile />} />
           <Route path="/dossiers" element={<div>dossiers</div>} />
           <Route path="/documents" element={<div>documents</div>} />
           <Route path="/rendez-vous" element={<div>rendez-vous</div>} />

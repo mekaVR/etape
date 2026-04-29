@@ -4,21 +4,21 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes } from 'node:crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UsersService } from '@users/services/users.service';
 import { PasswordService } from '@auth/services/password.service';
 import { MailService } from '@mail/services/mail.service';
-import { ConfigService } from '@nestjs/config';
+import { DEFAULT_EMAIL_VERIFICATION_TTL_MS } from '@auth/constants/email-verification.constants';
 
 const TOKEN_BYTES = 32;
-
 const GHOST_USER_EMAIL =
   '__system_password_reset_dummy__@transition-pro.internal';
 
 @Injectable()
-export class PasswordResetService implements OnModuleInit {
-  private readonly logger = new Logger(PasswordResetService.name);
+export class EmailVerificationService implements OnModuleInit {
+  private readonly logger = new Logger(EmailVerificationService.name);
   private ghostUserId!: number;
 
   constructor(
@@ -46,47 +46,38 @@ export class PasswordResetService implements OnModuleInit {
     this.ghostUserId = ghost.id;
   }
 
-  async forgotPassword(email: string): Promise<void> {
+  async sendVerification(userId: number, email: string): Promise<void> {
+    const token = await this.createTokenForUser(userId);
+    this.mailService.sendEmailVerification(email, token).catch((error) => {
+      this.logger.error(
+        `Failed to send verification email to ${email}`,
+        error instanceof Error ? error.stack : undefined,
+      );
+    });
+  }
+
+  async resendVerification(email: string): Promise<void> {
     const user =
       email === GHOST_USER_EMAIL
         ? null
         : await this.usersService.findByEmail(email);
     const userId = user?.id ?? this.ghostUserId;
 
-    await this.prisma.passwordResetToken.deleteMany({
-      where: { userId, usedAt: null },
-    });
+    const token = await this.createTokenForUser(userId);
 
-    const token = randomBytes(TOKEN_BYTES).toString('hex');
-    const tokenHash = this.hashToken(token);
+    if (!user || user.emailVerifiedAt) return;
 
-    await this.prisma.passwordResetToken.create({
-      data: {
-        userId,
-        tokenHash,
-        expiresAt: new Date(
-          Date.now() +
-            this.config.get<number>(
-              'PASSWORD_RESET_TOKEN_TTL_MS',
-              60 * 60 * 1000,
-            ),
-        ),
-      },
-    });
-
-    if (!user) return;
-
-    this.mailService.sendPasswordReset(user.email, token).catch((error) => {
+    this.mailService.sendEmailVerification(user.email, token).catch((error) => {
       this.logger.error(
-        `Failed to send password reset email to ${user.email}`,
+        `Failed to send verification email to ${user.email}`,
         error instanceof Error ? error.stack : undefined,
       );
     });
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<void> {
+  async verifyEmail(token: string): Promise<void> {
     const tokenHash = this.hashToken(token);
-    const record = await this.prisma.passwordResetToken.findUnique({
+    const record = await this.prisma.emailVerificationToken.findUnique({
       where: { tokenHash },
     });
 
@@ -99,22 +90,46 @@ export class PasswordResetService implements OnModuleInit {
       throw new BadRequestException('Lien invalide ou expiré');
     }
 
-    const hashedPassword =
-      await this.passwordService.encryptPassword(newPassword);
-
     await this.prisma.$transaction(async (tx) => {
       await tx.user.update({
         where: { id: record.userId },
-        data: { password: hashedPassword },
+        data: { emailVerifiedAt: new Date() },
       });
-      await tx.passwordResetToken.update({
+      await tx.emailVerificationToken.update({
         where: { id: record.id },
         data: { usedAt: new Date() },
       });
-      await tx.passwordResetToken.deleteMany({
-        where: { userId: record.userId, id: { not: record.id }, usedAt: null },
+      await tx.emailVerificationToken.deleteMany({
+        where: {
+          userId: record.userId,
+          id: { not: record.id },
+          usedAt: null,
+        },
       });
     });
+  }
+
+  private async createTokenForUser(userId: number): Promise<string> {
+    await this.prisma.emailVerificationToken.deleteMany({
+      where: { userId, usedAt: null },
+    });
+    const token = randomBytes(TOKEN_BYTES).toString('hex');
+    const tokenHash = this.hashToken(token);
+    await this.prisma.emailVerificationToken.create({
+      data: {
+        userId,
+        tokenHash,
+        expiresAt: new Date(Date.now() + this.getTtlMs()),
+      },
+    });
+    return token;
+  }
+
+  private getTtlMs(): number {
+    return this.config.get<number>(
+      'EMAIL_VERIFICATION_TOKEN_TTL_MS',
+      DEFAULT_EMAIL_VERIFICATION_TTL_MS,
+    );
   }
 
   private hashToken(token: string): string {

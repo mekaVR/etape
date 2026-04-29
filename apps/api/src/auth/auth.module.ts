@@ -5,11 +5,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthController } from '@auth/controllers/auth.controller';
 import { AuthService } from '@auth/services/auth.service';
 import { PasswordService } from '@auth/services/password.service';
+import { EmailVerificationService } from '@auth/services/email-verification.service';
+import { PasswordResetService } from '@auth/services/password-reset.service';
 import { JwtStrategy } from '@auth/strategies/jwt.strategy';
 import { RefreshStrategy } from '@auth/strategies/refresh.strategy';
 import { UsersModule } from '@users/users.module';
 import { StringValue } from 'ms';
-import { PasswordResetService } from '@auth/services/password-reset.service';
 import { MailModule } from '@mail/mail.module';
 
 @Module({
@@ -33,6 +34,7 @@ import { MailModule } from '@mail/mail.module';
     AuthService,
     PasswordService,
     PasswordResetService,
+    EmailVerificationService,
     JwtStrategy,
     RefreshStrategy,
   ],
