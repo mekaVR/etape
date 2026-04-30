@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     "./schemas/*": "./src/schemas/*.ts",
-    "./types/*": "./src/types/*.ts"
+    "./types/*": "./src/types/*.ts",
+    "./constants/*": "./src/constants/*.ts",
+    "./guards/*": "./src/guards/*.ts"
   },
   "scripts": {
     "build": "tsc",

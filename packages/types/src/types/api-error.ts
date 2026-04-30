@@ -1,3 +1,5 @@
+import type { AuthErrorCode } from "../constants/api-errors.js";
+
 export interface ApiValidationError {
   statusCode: 400;
   error: "Validation failed";
@@ -11,4 +13,13 @@ export interface ApiBusinessError {
   fields?: Record<string, string>;
 }
 
-export type ApiErrorResponse = ApiValidationError | ApiBusinessError;
+export interface ApiCodedError {
+  statusCode: number;
+  code: AuthErrorCode;
+  message: string;
+}
+
+export type ApiErrorResponse =
+  | ApiValidationError
+  | ApiBusinessError
+  | ApiCodedError;

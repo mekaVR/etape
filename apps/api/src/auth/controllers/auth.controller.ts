@@ -61,7 +61,7 @@ export class AuthController {
     @Request() req: AuthenticatedRequest,
     @Res({ passthrough: true }) res: Response,
   ) {
-    return this.authService.refresh(req.user.id, req.user.email, res);
+    return this.authService.refresh(req.user.email, res);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

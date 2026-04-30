@@ -5,14 +5,15 @@ import type {
   ForgotPasswordPayload,
   LoginPayload,
   RegisterPayload,
+  ResendVerificationPayload,
   ResetPasswordPayload,
+  VerifyEmailPayload,
 } from "@etape/types/schemas/auth";
 import { getApiInstance } from "./instance.ts";
 
 interface JwtPayload {
   sub: number;
   email: string;
-  username: string;
   role: User["role"];
 }
 
@@ -21,7 +22,6 @@ export function decodeToken(token: string): User {
   return {
     id: payload.sub,
     email: payload.email,
-    username: payload.username,
     role: payload.role,
   };
 }
@@ -35,15 +35,18 @@ export async function login(payload: LoginPayload): Promise<AuthResponse> {
   return data;
 }
 
-export async function register(
-  payload: RegisterPayload,
-): Promise<AuthResponse> {
-  const { data } = await getApiInstance().post<AuthResponse>(
-    "/auth/register",
-    payload,
-  );
-  setAccessToken(data.accessToken);
-  return data;
+export async function register(payload: RegisterPayload): Promise<void> {
+  await getApiInstance().post("/auth/register", payload);
+}
+
+export async function verifyEmail(payload: VerifyEmailPayload): Promise<void> {
+  await getApiInstance().post("/auth/verify-email", payload);
+}
+
+export async function resendVerification(
+  payload: ResendVerificationPayload,
+): Promise<void> {
+  await getApiInstance().post("/auth/resend-verification", payload);
 }
 
 export async function forgotPassword(

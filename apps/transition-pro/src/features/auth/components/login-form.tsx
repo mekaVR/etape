@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router";
 import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent } from "@workspace/ui/components/card";
@@ -12,23 +13,27 @@ import {
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
 import { useLogin } from "../hooks/use-login";
+import { VerifiedBanner } from "./verified-banner";
+import { EmailNotVerifiedAlert } from "./email-not-verified-alert";
 import { type LoginPayload, loginSchema } from "@etape/types/schemas/auth";
 import { loginDefaultValues } from "@etape/types/schemas/auth-defaults";
 import logo from "@/assets/transition-pro_logo.png";
 import cover from "@/assets/HERO_2.png";
-import { Link } from "react-router";
 
 export function LoginForm() {
   const {
     register,
     handleSubmit,
     setError,
+    getValues,
     formState: { errors },
   } = useForm<LoginPayload>({
     resolver: zodResolver(loginSchema),
     defaultValues: loginDefaultValues,
   });
   const { mutate, isPending } = useLogin(setError);
+
+  const emailNotVerified = errors.root?.emailNotVerified;
 
   return (
     <div className={cn("grid gap-6 md:grid-cols-2")}>
@@ -43,10 +48,18 @@ export function LoginForm() {
                   Connectez-vous à votre compte
                 </p>
               </div>
-              {errors.root?.serverError && (
-                <FieldError role="alert" className="text-sm text-destructive">
-                  {errors.root.serverError.message}
-                </FieldError>
+              <VerifiedBanner />
+              {emailNotVerified ? (
+                <EmailNotVerifiedAlert
+                  message={emailNotVerified.message ?? ""}
+                  email={getValues("email")}
+                />
+              ) : (
+                errors.root?.serverError && (
+                  <FieldError role="alert" className="text-sm text-destructive">
+                    {errors.root.serverError.message}
+                  </FieldError>
+                )
               )}
               <Field data-invalid={!!errors.email}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>

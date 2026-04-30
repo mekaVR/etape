@@ -4,6 +4,7 @@ import { createTransport, Transporter } from 'nodemailer';
 import { passwordResetTemplate } from '@mail/templates/password-reset.template';
 import { emailVerificationTemplate } from '@mail/templates/email-verification.template';
 import { DEFAULT_EMAIL_VERIFICATION_TTL_MS } from '@auth/constants/email-verification.constants';
+import { getNumberConfig } from '../../common/config';
 
 @Injectable()
 export class MailService {
@@ -43,7 +44,8 @@ export class MailService {
     const appUrl = this.config.get<string>('APP_URL');
     const logoUrl = this.config.get<string>('MAIL_LOGO_URL');
     const from = this.config.get<string>('MAIL_FROM');
-    const ttlMs = this.config.get<number>(
+    const ttlMs = getNumberConfig(
+      this.config,
       'EMAIL_VERIFICATION_TOKEN_TTL_MS',
       DEFAULT_EMAIL_VERIFICATION_TTL_MS,
     );

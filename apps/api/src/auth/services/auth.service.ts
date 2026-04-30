@@ -12,15 +12,25 @@ import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
 import { StringValue } from 'ms';
 import type { LoginPayload, RegisterPayload } from '@etape/types/schemas/auth';
+import { AUTH_ERROR_CODES } from '@etape/types/constants/api-errors';
+import { getNumberConfig } from '../../common/config';
+import { DEFAULT_REFRESH_TOKEN_MAX_AGE } from '@auth/constants/token.constants';
+import { PrismaService } from '../../prisma/prisma.service';
+import { MailService } from '@mail/services/mail.service';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly usersService: UsersService,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
     private readonly emailVerificationService: EmailVerificationService,
+    private readonly prisma: PrismaService,
+    private readonly mailService: MailService,
   ) {}
 
   async register(registerDto: RegisterPayload): Promise<void> {
@@ -31,8 +41,22 @@ export class AuthService {
         fields: { email: 'Cet email est déjà utilisé' },
       });
     }
-    const user = await this.usersService.createUser(registerDto);
-    await this.emailVerificationService.sendVerification(user.id, user.email);
+
+    const { user, token } = await this.prisma.$transaction(async (tx) => {
+      const user = await this.usersService.createUser(registerDto, tx);
+      const token = await this.emailVerificationService.createTokenForUser(
+        user.id,
+        tx,
+      );
+      return { user, token };
+    });
+
+    this.mailService.sendEmailVerification(user.email, token).catch((error) => {
+      this.logger.error(
+        `Failed to send verification email to ${user.email}`,
+        error instanceof Error ? error.stack : undefined,
+      );
+    });
   }
 
   async login(loginDto: LoginPayload, res: Response) {
@@ -51,7 +75,7 @@ export class AuthService {
 
     if (!user.emailVerifiedAt) {
       throw new UnauthorizedException({
-        code: 'EMAIL_NOT_VERIFIED',
+        code: AUTH_ERROR_CODES.EMAIL_NOT_VERIFIED,
         message:
           'Veuillez vérifier votre adresse email avant de vous connecter',
       });
@@ -63,7 +87,7 @@ export class AuthService {
     return { accessToken: tokens.accessToken };
   }
 
-  async refresh(userId: number, email: string, res: Response) {
+  async refresh(email: string, res: Response) {
     const user = await this.usersService.findByEmail(email);
     const tokens = await this.generateTokens(user.id, user.email, user.role);
     this.setRefreshTokenCookie(res, tokens.refreshToken);
@@ -100,7 +124,11 @@ export class AuthService {
   private setRefreshTokenCookie(res: Response, refreshToken: string) {
     res.cookie('refresh_token', refreshToken, {
       ...this.getRefreshCookieBaseOptions(),
-      maxAge: this.config.get<number>('REFRESH_TOKEN_MAX_AGE'),
+      maxAge: getNumberConfig(
+        this.config,
+        'REFRESH_TOKEN_MAX_AGE',
+        DEFAULT_REFRESH_TOKEN_MAX_AGE,
+      ),
     });
   }
 }

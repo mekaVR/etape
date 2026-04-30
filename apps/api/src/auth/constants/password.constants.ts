@@ -1,1 +1,2 @@
 export const SALT_ROUNDS = 10;
+export const DEFAULT_PASSWORD_RESET_TOKEN_TTL_MS = 96 * 60 * 60 * 1000;

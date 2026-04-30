@@ -11,6 +11,8 @@ import { UsersService } from '@users/services/users.service';
 import { PasswordService } from '@auth/services/password.service';
 import { MailService } from '@mail/services/mail.service';
 import { DEFAULT_EMAIL_VERIFICATION_TTL_MS } from '@auth/constants/email-verification.constants';
+import { getNumberConfig } from '../../common/config';
+import type { Prisma } from '../../generated/prisma/client';
 
 const TOKEN_BYTES = 32;
 const GHOST_USER_EMAIL =
@@ -44,16 +46,6 @@ export class EmailVerificationService implements OnModuleInit {
       update: {},
     });
     this.ghostUserId = ghost.id;
-  }
-
-  async sendVerification(userId: number, email: string): Promise<void> {
-    const token = await this.createTokenForUser(userId);
-    this.mailService.sendEmailVerification(email, token).catch((error) => {
-      this.logger.error(
-        `Failed to send verification email to ${email}`,
-        error instanceof Error ? error.stack : undefined,
-      );
-    });
   }
 
   async resendVerification(email: string): Promise<void> {
@@ -109,13 +101,17 @@ export class EmailVerificationService implements OnModuleInit {
     });
   }
 
-  private async createTokenForUser(userId: number): Promise<string> {
-    await this.prisma.emailVerificationToken.deleteMany({
+  async createTokenForUser(
+    userId: number,
+    tx?: Prisma.TransactionClient,
+  ): Promise<string> {
+    const client = tx ?? this.prisma;
+    await client.emailVerificationToken.deleteMany({
       where: { userId, usedAt: null },
     });
     const token = randomBytes(TOKEN_BYTES).toString('hex');
     const tokenHash = this.hashToken(token);
-    await this.prisma.emailVerificationToken.create({
+    await client.emailVerificationToken.create({
       data: {
         userId,
         tokenHash,
@@ -126,7 +122,8 @@ export class EmailVerificationService implements OnModuleInit {
   }
 
   private getTtlMs(): number {
-    return this.config.get<number>(
+    return getNumberConfig(
+      this.config,
       'EMAIL_VERIFICATION_TOKEN_TTL_MS',
       DEFAULT_EMAIL_VERIFICATION_TTL_MS,
     );

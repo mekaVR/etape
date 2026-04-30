@@ -10,6 +10,8 @@ import { UsersService } from '@users/services/users.service';
 import { PasswordService } from '@auth/services/password.service';
 import { MailService } from '@mail/services/mail.service';
 import { ConfigService } from '@nestjs/config';
+import { getNumberConfig } from '../../common/config';
+import { DEFAULT_PASSWORD_RESET_TOKEN_TTL_MS } from '@auth/constants/password.constants';
 
 const TOKEN_BYTES = 32;
 
@@ -66,9 +68,10 @@ export class PasswordResetService implements OnModuleInit {
         tokenHash,
         expiresAt: new Date(
           Date.now() +
-            this.config.get<number>(
+            getNumberConfig(
+              this.config,
               'PASSWORD_RESET_TOKEN_TTL_MS',
-              60 * 60 * 1000,
+              DEFAULT_PASSWORD_RESET_TOKEN_TTL_MS,
             ),
         ),
       },

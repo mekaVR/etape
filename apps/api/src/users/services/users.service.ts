@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { PasswordService } from '@auth/services/password.service';
 import type { RegisterPayload } from '@etape/types/schemas/auth';
 import type { UpdateUserPayload } from '@etape/types/schemas/user';
+import type { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -11,11 +12,15 @@ export class UsersService {
     private readonly passwordService: PasswordService,
   ) {}
 
-  async createUser(createUserDto: RegisterPayload) {
+  async createUser(
+    createUserDto: RegisterPayload,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const client = tx ?? this.prisma;
     const hashedPassword = await this.passwordService.encryptPassword(
       createUserDto.password,
     );
-    return this.prisma.user.create({
+    return client.user.create({
       data: {
         email: createUserDto.email,
         password: hashedPassword,

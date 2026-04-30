@@ -1,8 +1,9 @@
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
 import { Card, CardContent } from "@workspace/ui/components/card";
+import { Checkbox } from "@workspace/ui/components/checkbox";
 import {
   Field,
   FieldDescription,
@@ -26,6 +27,7 @@ export function SignupForm() {
     register,
     handleSubmit,
     setError,
+    control,
     formState: { errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupFormSchema),
@@ -55,26 +57,6 @@ export function SignupForm() {
                   {errors.root.serverError.message}
                 </FieldError>
               )}
-              <Field data-invalid={!!errors.username}>
-                <FieldLabel htmlFor="username">
-                  Nom d&#39;utilisateur
-                </FieldLabel>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="johndoe"
-                  aria-invalid={!!errors.username}
-                  aria-describedby={
-                    errors.username ? "username-error" : undefined
-                  }
-                  {...register("username")}
-                />
-                {errors.username && (
-                  <FieldError id="username-error">
-                    {errors.username.message}
-                  </FieldError>
-                )}
-              </Field>
               <Field data-invalid={!!errors.email}>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
@@ -133,6 +115,63 @@ export function SignupForm() {
                 <FieldDescription>
                   Minimum 8 caractères, au moins une lettre et un chiffre.
                 </FieldDescription>
+              </Field>
+              <Field data-invalid={!!errors.acceptCgu}>
+                <div className="flex items-start gap-3">
+                  <Controller
+                    name="acceptCgu"
+                    control={control}
+                    render={({ field }) => (
+                      <Checkbox
+                        id="acceptCgu"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        aria-invalid={!!errors.acceptCgu}
+                        aria-describedby={
+                          errors.acceptCgu ? "accept-cgu-error" : undefined
+                        }
+                        className="mt-1"
+                      />
+                    )}
+                  />
+                  <label
+                    htmlFor="acceptCgu"
+                    className="text-sm font-normal leading-relaxed cursor-pointer"
+                  >
+                    J&apos;accepte les{" "}
+                    <a
+                      href="#"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-primary underline underline-offset-4 hover:opacity-80"
+                    >
+                      Conditions Générales d&apos;Utilisation
+                    </a>{" "}
+                    et les{" "}
+                    <a
+                      href="#"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-primary underline underline-offset-4 hover:opacity-80"
+                    >
+                      Conditions Générales d&apos;Intervention
+                    </a>
+                    . Je comprends que les informations de mon compte seront
+                    utilisées conformément à la{" "}
+                    <a
+                      href="#"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-primary underline underline-offset-4 hover:opacity-80"
+                    >
+                      Politique de confidentialité et de protection des données
+                      à caractère personnel
+                    </a>{" "}
+                    de Transitions Pro.
+                  </label>
+                </div>
+                {errors.acceptCgu && (
+                  <FieldError id="accept-cgu-error">
+                    {errors.acceptCgu.message}
+                  </FieldError>
+                )}
               </Field>
               <Field>
                 <Button type="submit" disabled={isPending}>
