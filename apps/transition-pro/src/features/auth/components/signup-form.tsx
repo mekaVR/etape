@@ -63,6 +63,7 @@ export function SignupForm() {
                 <Input
                   id="email"
                   type="email"
+                  autoComplete="email"
                   placeholder="m@example.com"
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "email-error" : undefined}
@@ -80,6 +81,7 @@ export function SignupForm() {
                     <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
                     <PasswordInput
                       id="password"
+                      autoComplete="new-password"
                       aria-invalid={!!errors.password}
                       aria-describedby={
                         errors.password ? "password-error" : undefined
@@ -96,6 +98,7 @@ export function SignupForm() {
                     <FieldLabel htmlFor="confirmPassword">Confirmer</FieldLabel>
                     <PasswordInput
                       id="confirmPassword"
+                      autoComplete="new-password"
                       aria-invalid={!!errors.confirmPassword}
                       aria-describedby={
                         errors.confirmPassword

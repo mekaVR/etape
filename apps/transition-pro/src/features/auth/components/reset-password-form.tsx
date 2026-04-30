@@ -96,6 +96,7 @@ export function ResetPasswordForm() {
                     <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
                     <PasswordInput
                       id="password"
+                      autoComplete="new-password"
                       aria-invalid={!!errors.password}
                       aria-describedby={
                         errors.password ? "password-error" : undefined
@@ -112,6 +113,7 @@ export function ResetPasswordForm() {
                     <FieldLabel htmlFor="confirmPassword">Confirmer</FieldLabel>
                     <PasswordInput
                       id="confirmPassword"
+                      autoComplete="new-password"
                       aria-invalid={!!errors.confirmPassword}
                       aria-describedby={
                         errors.confirmPassword
