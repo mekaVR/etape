@@ -64,12 +64,19 @@ export function CheckEmailCard() {
           </FieldGroup>
         </div>
       </div>
-      <Card className="hidden overflow-hidden p-0 md:block md:h-[700px]">
+      <Card className="relative hidden overflow-hidden p-0 md:block md:h-[700px]">
         <img
           src={cover}
           alt="Transition Pro"
           className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"
+        />
+        <p className="absolute inset-x-0 bottom-0 p-8 text-2xl font-bold leading-tight text-white">
+          Changer de métier tout simplement
+        </p>
       </Card>
     </div>
   );

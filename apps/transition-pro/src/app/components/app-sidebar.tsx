@@ -25,8 +25,8 @@ import {
   HeadsetIcon,
 } from "@phosphor-icons/react";
 
-import logo from "@/assets/transition-pro_logo-sidebar.jpg";
 import logo_collapse from "@/assets/transition-pro_logo_collapsed.png";
+import logo_png from "@/assets/transition-pro_logo.png";
 
 const navItems = [
   { title: "Tableau de bord", url: "/", icon: HouseIcon },
@@ -47,9 +47,9 @@ export function AppSidebar() {
     <Sidebar collapsible={"icon"}>
       <SidebarHeader className="p-4">
         <img
-          src={logo}
+          src={logo_png}
           alt="Transition Pro"
-          className="h-20 w-auto object-contain group-data-[collapsible=icon]:hidden"
+          className="h-28 w-auto object-contain group-data-[collapsible=icon]:hidden"
         />
         <img
           src={logo_collapse}
@@ -57,7 +57,7 @@ export function AppSidebar() {
           className="hidden size-8 object-cover group-data-[collapsible=icon]:block"
         />
         <span className="text-md group-data-[collapsible=icon]:hidden">
-          {user?.username}
+          {user?.role}
         </span>
       </SidebarHeader>
 
@@ -70,7 +70,7 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.url}
-                  className="data-active:bg-sidebar-primary data-active:text-sidebar-primary-foreground"
+                  className="border-l-4 border-l-transparent hover:[&_svg]:text-sidebar-active-indicator data-active:border-l-sidebar-active-indicator data-active:bg-background data-active:font-semibold data-active:text-foreground data-active:[&_svg]:text-sidebar-active-indicator"
                 >
                   <Link to={item.url}>
                     <item.icon />

@@ -28,7 +28,7 @@ export default function Dashboard() {
               <h2>Mes dossier en cours</h2>
               <Button
                 variant="outline"
-                className="border-primary text-primary hover:bg-sidebar-accent"
+                className="border-primary text-primary hover:bg-accent hover:text-primary-strong"
               >
                 <Plus />
                 Nouvelle demande
