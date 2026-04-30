@@ -1,4 +1,4 @@
-import type { ApiCodedError } from "../types/api-error.js";
+import type { ApiCodedError } from "@etape/types/types/api-error";
 
 export function isApiCodedError(value: unknown): value is ApiCodedError {
   if (typeof value !== "object" || value === null) return false;

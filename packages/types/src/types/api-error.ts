@@ -1,4 +1,4 @@
-import type { AuthErrorCode } from "../constants/api-errors.js";
+import type { AuthErrorCode } from "@etape/types/constants/api-errors";
 
 export interface ApiValidationError {
   statusCode: 400;

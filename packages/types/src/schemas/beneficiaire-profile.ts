@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { nationalitesList } from "./nationalites";
+import { nationalitesList } from "@etape/types/schemas/nationalites";
 
 const numeroSecuRegex = /^[12]\d{14}$/;
 const codePostalRegex = /^\d{5}$/;
