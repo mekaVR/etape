@@ -12,6 +12,7 @@ import {
   FieldLabel,
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
+import { PasswordInput } from "@workspace/ui/components/password-input";
 import { useLogin } from "../hooks/use-login";
 import { VerifiedBanner } from "./verified-banner";
 import { EmailNotVerifiedAlert } from "./email-not-verified-alert";
@@ -88,9 +89,8 @@ export function LoginForm() {
                     Mot de passe oublié ?
                   </Link>
                 </div>
-                <Input
+                <PasswordInput
                   id="password"
-                  type="password"
                   aria-invalid={!!errors.password}
                   aria-describedby={
                     errors.password ? "password-error" : undefined

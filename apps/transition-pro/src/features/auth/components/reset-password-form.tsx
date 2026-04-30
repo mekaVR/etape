@@ -12,6 +12,7 @@ import {
   FieldLabel,
 } from "@workspace/ui/components/field";
 import { Input } from "@workspace/ui/components/input";
+import { PasswordInput } from "@workspace/ui/components/password-input";
 import { useResetPassword } from "../hooks/use-reset-password";
 import {
   resetPasswordFormSchema,
@@ -93,9 +94,8 @@ export function ResetPasswordForm() {
                 <Field className="grid grid-cols-2 gap-4">
                   <Field data-invalid={!!errors.password}>
                     <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
-                    <Input
+                    <PasswordInput
                       id="password"
-                      type="password"
                       aria-invalid={!!errors.password}
                       aria-describedby={
                         errors.password ? "password-error" : undefined
@@ -110,9 +110,8 @@ export function ResetPasswordForm() {
                   </Field>
                   <Field data-invalid={!!errors.confirmPassword}>
                     <FieldLabel htmlFor="confirmPassword">Confirmer</FieldLabel>
-                    <Input
+                    <PasswordInput
                       id="confirmPassword"
-                      type="password"
                       aria-invalid={!!errors.confirmPassword}
                       aria-describedby={
                         errors.confirmPassword
