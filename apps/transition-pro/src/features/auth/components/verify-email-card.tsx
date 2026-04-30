@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { cn } from "@workspace/ui/lib/utils";
 import { Button } from "@workspace/ui/components/button";
-import { Card, CardContent } from "@workspace/ui/components/card";
+import { Card } from "@workspace/ui/components/card";
 import { FieldGroup } from "@workspace/ui/components/field";
 import { useVerifyEmail } from "../hooks/use-verify-email";
 import logo from "@/assets/transition-pro_logo.png";
@@ -46,9 +46,9 @@ export function VerifyEmailCard() {
   }
 
   return (
-    <div className={cn("grid gap-6 md:grid-cols-2")}>
-      <Card className="overflow-hidden min-h-[640px] md:min-h-[700px]">
-        <CardContent className="p-6 md:p-8">
+    <div className={cn("grid items-center gap-6 md:grid-cols-[2fr_1fr]")}>
+      <div className="overflow-hidden min-h-[640px] md:min-h-[700px]">
+        <div className="p-6 md:p-8">
           <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
               <img src={logo} alt="Transition Pro" className="h-40 w-auto" />
@@ -63,9 +63,9 @@ export function VerifyEmailCard() {
               </Button>
             )}
           </FieldGroup>
-        </CardContent>
-      </Card>
-      <Card className="hidden overflow-hidden p-0 md:block md:max-h-[700px]">
+        </div>
+      </div>
+      <Card className="hidden overflow-hidden p-0 md:block md:h-[700px]">
         <img
           src={cover}
           alt="Transition Pro"
