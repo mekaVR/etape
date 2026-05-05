@@ -1,11 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@workspace/ui/components/card";
 import { Button } from "@workspace/ui/components/button";
 import {
   Field,
@@ -41,42 +35,35 @@ export function ProfessionalSection() {
   const { mutate, isPending } = useUpdateMyProfile(setError);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Ma situation professionnelle</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit((data) => mutate(data))}>
-          <FieldGroup>
-            <Field data-invalid={!!errors.datePremierEmploi}>
-              <FieldLabel htmlFor="datePremierEmploi">
-                Date du premier emploi
-              </FieldLabel>
-              <Controller
-                name="datePremierEmploi"
-                control={control}
-                render={({ field }) => (
-                  <DatePicker
-                    id="datePremierEmploi"
-                    value={field.value}
-                    onChange={field.onChange}
-                    aria-invalid={!!errors.datePremierEmploi}
-                  />
-                )}
+    <form onSubmit={handleSubmit((data) => mutate(data))}>
+      <FieldGroup className={"px-20"}>
+        <Field data-invalid={!!errors.datePremierEmploi}>
+          <FieldLabel htmlFor="datePremierEmploi">
+            Date du premier emploi
+          </FieldLabel>
+          <Controller
+            name="datePremierEmploi"
+            control={control}
+            render={({ field }) => (
+              <DatePicker
+                id="datePremierEmploi"
+                value={field.value}
+                onChange={field.onChange}
+                aria-invalid={!!errors.datePremierEmploi}
               />
-              {errors.datePremierEmploi && (
-                <FieldError>{errors.datePremierEmploi.message}</FieldError>
-              )}
-            </Field>
+            )}
+          />
+          {errors.datePremierEmploi && (
+            <FieldError>{errors.datePremierEmploi.message}</FieldError>
+          )}
+        </Field>
 
-            <Field>
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Enregistrement..." : "Enregistrer"}
-              </Button>
-            </Field>
-          </FieldGroup>
-        </form>
-      </CardContent>
-    </Card>
+        <Field orientation={"horizontal"} className={"justify-end"}>
+          <Button type="submit" disabled={isPending} className={"w-60"}>
+            {isPending ? "Enregistrement..." : "Enregistrer"}
+          </Button>
+        </Field>
+      </FieldGroup>
+    </form>
   );
 }

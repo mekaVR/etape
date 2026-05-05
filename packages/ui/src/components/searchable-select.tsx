@@ -40,7 +40,7 @@ export function SearchableSelect<T extends string>({
         aria-describedby={rest["aria-describedby"]}
         showClear
       />
-      <ComboboxContent>
+      <ComboboxContent className="max-h-72">
         <ComboboxEmpty>{placeholderEmpty}</ComboboxEmpty>
         <ComboboxList>
           {(item: T) => (

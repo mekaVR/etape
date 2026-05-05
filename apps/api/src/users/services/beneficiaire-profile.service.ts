@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { BeneficiaireProfilePayload } from '@etape/types/schemas/beneficiaire-profile';
+import { isUniqueConstraintOn } from '../../prisma/prisma-errors';
 
 @Injectable()
 export class BeneficiaireProfileService {
@@ -13,10 +14,23 @@ export class BeneficiaireProfileService {
   }
 
   async upsertProfile(userId: number, data: BeneficiaireProfilePayload) {
-    return this.prisma.beneficiaireProfile.upsert({
-      where: { userId },
-      create: { userId, ...data },
-      update: data,
-    });
+    try {
+      return await this.prisma.beneficiaireProfile.upsert({
+        where: { userId },
+        create: { userId, ...data },
+        update: data,
+      });
+    } catch (error) {
+      if (isUniqueConstraintOn(error, 'numeroSecuriteSociale')) {
+        throw new ConflictException({
+          message: 'La mise à jour du profil a échoué',
+          fields: {
+            numeroSecuriteSociale:
+              'Ce numéro de sécurité sociale est déjà utilisé',
+          },
+        });
+      }
+      throw error;
+    }
   }
 }
