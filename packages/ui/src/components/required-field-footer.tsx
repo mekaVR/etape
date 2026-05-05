@@ -1,11 +1,17 @@
 import { FieldError, FieldDescription } from "@workspace/ui/components/field";
 
-export function RequiredFieldFooter({ error }: { error?: string }) {
-  return error ? (
-    <FieldError>{error}</FieldError>
+interface RequiredFieldFooterProps {
+  errorMessage?: string;
+  description?: string;
+}
+
+export function RequiredFieldFooter({
+  errorMessage,
+  description = "Ce champ est requis",
+}: RequiredFieldFooterProps) {
+  return errorMessage ? (
+    <FieldError>{errorMessage}</FieldError>
   ) : (
-    <FieldDescription className={"text-xs"}>
-      ce champ est requis
-    </FieldDescription>
+    <FieldDescription>{description}</FieldDescription>
   );
 }

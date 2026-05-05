@@ -119,15 +119,30 @@ export const identityFormSchema = beneficiaireProfileFormSchema
     }
   });
 
-export const contactFormSchema = beneficiaireProfileFormSchema.pick({
-  adresseNumero: true,
-  adresseVoie: true,
-  adresseComplement: true,
-  codePostal: true,
-  ville: true,
-  telephoneFixe: true,
-  telephonePortable: true,
-});
+export const contactFormSchema = beneficiaireProfileFormSchema
+  .pick({
+    adresseNumero: true,
+    adresseVoie: true,
+    adresseComplement: true,
+    codePostal: true,
+    ville: true,
+    telephoneFixe: true,
+    telephonePortable: true,
+  })
+  .superRefine((data, ctx) => {
+    if (!data.telephoneFixe && !data.telephonePortable) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Au moins un numéro de téléphone est requis",
+        path: ["telephoneFixe"],
+      });
+      ctx.addIssue({
+        code: "custom",
+        message: "Au moins un numéro de téléphone est requis",
+        path: ["telephonePortable"],
+      });
+    }
+  });
 
 export const professionalFormSchema = beneficiaireProfileFormSchema.pick({
   datePremierEmploi: true,

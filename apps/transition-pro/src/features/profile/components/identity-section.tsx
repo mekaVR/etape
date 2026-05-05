@@ -95,7 +95,7 @@ export function IdentitySection() {
                   aria-invalid={!!errors.nom}
                   {...register("nom")}
                 />
-                <RequiredFieldFooter error={errors.nom?.message} />
+                <RequiredFieldFooter errorMessage={errors.nom?.message} />
               </Field>
               <Field data-invalid={!!errors.prenom}>
                 <FieldLabel htmlFor="prenom">Prénom*</FieldLabel>
@@ -104,7 +104,7 @@ export function IdentitySection() {
                   aria-invalid={!!errors.prenom}
                   {...register("prenom")}
                 />
-                <RequiredFieldFooter error={errors.prenom?.message} />
+                <RequiredFieldFooter errorMessage={errors.prenom?.message} />
               </Field>
             </div>
 
@@ -125,7 +125,9 @@ export function IdentitySection() {
                     />
                   )}
                 />
-                <RequiredFieldFooter error={errors.dateNaissance?.message} />
+                <RequiredFieldFooter
+                  errorMessage={errors.dateNaissance?.message}
+                />
               </Field>
               <Field data-invalid={!!errors.lieuNaissance}>
                 <FieldLabel htmlFor="lieuNaissance">
@@ -177,7 +179,7 @@ export function IdentitySection() {
                 {...register("numeroSecuriteSociale")}
               />
               <RequiredFieldFooter
-                error={errors.numeroSecuriteSociale?.message}
+                errorMessage={errors.numeroSecuriteSociale?.message}
               />
             </Field>
 

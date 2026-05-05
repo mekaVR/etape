@@ -3,7 +3,8 @@
   "compilerOptions": {
     "strictNullChecks": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@workspace/ui/*": ["./src/*"]
     },
     "typeRoots": ["../../node_modules/@types"]
   },

@@ -24,6 +24,7 @@ import { useAuth } from "@/app/provider/auth-provider";
 import { useMyProfile } from "../hooks/use-my-profile";
 import { useUpdateMyProfile } from "../hooks/use-update-my-profile";
 import { mapContactToForm } from "@/lib/profile-mappers.ts";
+import { RequiredFieldFooter } from "@workspace/ui/components/required-field-footer";
 
 export function ContactSection() {
   const { user } = useAuth();
@@ -147,9 +148,10 @@ export function ContactSection() {
                   aria-invalid={!!errors.telephoneFixe}
                   {...register("telephoneFixe")}
                 />
-                {errors.telephoneFixe && (
-                  <FieldError>{errors.telephoneFixe.message}</FieldError>
-                )}
+                <RequiredFieldFooter
+                  errorMessage={errors.telephonePortable?.message}
+                  description="Au moins un téléphone (fixe ou portable) est requis"
+                />
               </Field>
               <Field data-invalid={!!errors.telephonePortable}>
                 <FieldLabel htmlFor="telephonePortable">
@@ -162,9 +164,10 @@ export function ContactSection() {
                   aria-invalid={!!errors.telephonePortable}
                   {...register("telephonePortable")}
                 />
-                {errors.telephonePortable && (
-                  <FieldError>{errors.telephonePortable.message}</FieldError>
-                )}
+                <RequiredFieldFooter
+                  errorMessage={errors.telephonePortable?.message}
+                  description="Au moins un téléphone (fixe ou portable) est requis"
+                />
               </Field>
             </div>
 
