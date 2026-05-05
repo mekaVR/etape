@@ -1,4 +1,5 @@
 import type { Civilite } from "@etape/types/schemas/beneficiaire-profile";
+import type { Nationalite } from "@etape/types/schemas/nationalites";
 
 export interface BeneficiaireProfile {
   id: number;
@@ -8,7 +9,7 @@ export interface BeneficiaireProfile {
   prenom: string | null;
   dateNaissance: string | null;
   lieuNaissance: string | null;
-  nationalite: string | null;
+  nationalite: Nationalite | null;
   numeroSecuriteSociale: string | null;
   adresseNumero: string | null;
   adresseVoie: string | null;

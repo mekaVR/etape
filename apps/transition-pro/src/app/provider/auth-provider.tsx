@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { setAccessToken, clearAccessToken } from "@etape/api-client/client";
+import { useQueryClient } from "@etape/api-client/hooks";
 import { decodeToken } from "@etape/api-client/auth";
 import type { User } from "@etape/types/types/auth";
 import { apiClient } from "@/lib/api";
@@ -18,6 +19,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await apiClient.post("/auth/logout");
     clearAccessToken();
     setUser(null);
+    queryClient.clear();
     navigate("/login");
   }
 
