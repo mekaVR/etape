@@ -71,7 +71,6 @@ export function ContactSection() {
                 <FieldLabel htmlFor="adresseNumero">Numéro</FieldLabel>
                 <Input
                   id="adresseNumero"
-                  placeholder="12bis"
                   aria-invalid={!!errors.adresseNumero}
                   {...register("adresseNumero")}
                 />
@@ -86,7 +85,6 @@ export function ContactSection() {
                 <FieldLabel htmlFor="adresseVoie">Voie</FieldLabel>
                 <Input
                   id="adresseVoie"
-                  placeholder="rue de la République"
                   aria-invalid={!!errors.adresseVoie}
                   {...register("adresseVoie")}
                 />
@@ -102,7 +100,6 @@ export function ContactSection() {
               </FieldLabel>
               <Input
                 id="adresseComplement"
-                placeholder="Bât. A, Apt 3"
                 aria-invalid={!!errors.adresseComplement}
                 {...register("adresseComplement")}
               />
@@ -119,7 +116,6 @@ export function ContactSection() {
                 <FieldLabel htmlFor="codePostal">Code postal</FieldLabel>
                 <Input
                   id="codePostal"
-                  placeholder="75001"
                   inputMode="numeric"
                   aria-invalid={!!errors.codePostal}
                   {...register("codePostal")}
@@ -132,7 +128,6 @@ export function ContactSection() {
                 <FieldLabel htmlFor="ville">Ville</FieldLabel>
                 <Input
                   id="ville"
-                  placeholder="Paris"
                   aria-invalid={!!errors.ville}
                   {...register("ville")}
                 />
@@ -148,7 +143,6 @@ export function ContactSection() {
                 <Input
                   id="telephoneFixe"
                   type="tel"
-                  placeholder="01 23 45 67 89"
                   inputMode="tel"
                   aria-invalid={!!errors.telephoneFixe}
                   {...register("telephoneFixe")}
@@ -164,7 +158,6 @@ export function ContactSection() {
                 <Input
                   id="telephonePortable"
                   type="tel"
-                  placeholder="06 12 34 56 78"
                   inputMode="tel"
                   aria-invalid={!!errors.telephonePortable}
                   {...register("telephonePortable")}

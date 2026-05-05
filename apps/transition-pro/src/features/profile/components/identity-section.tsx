@@ -29,8 +29,10 @@ import { identityFormDefaultValues } from "@etape/types/schemas/profile-defaults
 import { useMyProfile } from "../hooks/use-my-profile";
 import { useUpdateMyProfile } from "../hooks/use-update-my-profile";
 import { DatePicker } from "@workspace/ui/components/date-picker";
-import { NationaliteCombobox } from "./nationalite-combobox";
+import { RequiredFieldFooter } from "@workspace/ui/components/required-field-footer";
+import { SearchableSelect } from "@workspace/ui/components/searchable-select";
 import { mapProfileToForm } from "@/lib/profile-mappers.ts";
+import { nationalitesList } from "@etape/types/schemas/nationalites";
 
 export function IdentitySection() {
   const { data: profile } = useMyProfile();
@@ -87,31 +89,29 @@ export function IdentitySection() {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Field data-invalid={!!errors.nom}>
-                <FieldLabel htmlFor="nom">Nom</FieldLabel>
+                <FieldLabel htmlFor="nom">Nom*</FieldLabel>
                 <Input
                   id="nom"
                   aria-invalid={!!errors.nom}
                   {...register("nom")}
                 />
-                {errors.nom && <FieldError>{errors.nom.message}</FieldError>}
+                <RequiredFieldFooter error={errors.nom?.message} />
               </Field>
               <Field data-invalid={!!errors.prenom}>
-                <FieldLabel htmlFor="prenom">Prénom</FieldLabel>
+                <FieldLabel htmlFor="prenom">Prénom*</FieldLabel>
                 <Input
                   id="prenom"
                   aria-invalid={!!errors.prenom}
                   {...register("prenom")}
                 />
-                {errors.prenom && (
-                  <FieldError>{errors.prenom.message}</FieldError>
-                )}
+                <RequiredFieldFooter error={errors.prenom?.message} />
               </Field>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <Field data-invalid={!!errors.dateNaissance}>
                 <FieldLabel htmlFor="dateNaissance">
-                  Date de naissance
+                  Date de naissance*
                 </FieldLabel>
                 <Controller
                   name="dateNaissance"
@@ -125,13 +125,11 @@ export function IdentitySection() {
                     />
                   )}
                 />
-                {errors.dateNaissance && (
-                  <FieldError>{errors.dateNaissance.message}</FieldError>
-                )}
+                <RequiredFieldFooter error={errors.dateNaissance?.message} />
               </Field>
               <Field data-invalid={!!errors.lieuNaissance}>
                 <FieldLabel htmlFor="lieuNaissance">
-                  Lieu de naissance
+                  Lieu de naissance*
                 </FieldLabel>
                 <Input
                   id="lieuNaissance"
@@ -151,11 +149,14 @@ export function IdentitySection() {
                 name="nationalite"
                 control={control}
                 render={({ field }) => (
-                  <NationaliteCombobox
+                  <SearchableSelect
                     id="nationalite"
                     value={field.value}
                     onChange={field.onChange}
                     aria-invalid={!!errors.nationalite}
+                    placeholder="Sélectionner une nationalité"
+                    placeholderEmpty="Aucune nationalité trouvée."
+                    data={nationalitesList}
                   />
                 )}
               />
@@ -166,7 +167,7 @@ export function IdentitySection() {
 
             <Field data-invalid={!!errors.numeroSecuriteSociale}>
               <FieldLabel htmlFor="numeroSecuriteSociale">
-                Numéro de sécurité sociale
+                Numéro de sécurité sociale*
               </FieldLabel>
               <Input
                 id="numeroSecuriteSociale"
@@ -175,9 +176,9 @@ export function IdentitySection() {
                 aria-invalid={!!errors.numeroSecuriteSociale}
                 {...register("numeroSecuriteSociale")}
               />
-              {errors.numeroSecuriteSociale && (
-                <FieldError>{errors.numeroSecuriteSociale.message}</FieldError>
-              )}
+              <RequiredFieldFooter
+                error={errors.numeroSecuriteSociale?.message}
+              />
             </Field>
 
             <Field>
